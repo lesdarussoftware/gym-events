@@ -2,12 +2,14 @@ import { useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import SearchIcon from '@mui/icons-material/Search';
 
 import { useEvents } from "../hooks/useEvents";
 import { useForm } from "../hooks/useForm";
 
 import { Layout } from "../components/Layout";
-import { AbmEvents } from "../components/AbmEvents";
+import { AbmEvents } from "../components/events/AbmEvents";
+import { WorkOnEvent } from "../components/events/WorkOnEvent";
 
 export function Events({ window }) {
 
@@ -65,15 +67,26 @@ export function Events({ window }) {
                             }}
                         >
                             <Typography variant="h6">{`#${event.id} ${event.name}`}</Typography>
-                            <Button size="small" variant="contained"
-                                sx={{ color: '#FFF' }}
-                                onClick={() => {
-                                    eventFormData.setFormData(event);
-                                    setAction('EDIT');
-                                }}
-                            >
-                                <EditIcon />
-                            </Button>
+                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                <Button size="small" variant="contained"
+                                    sx={{ color: '#FFF' }}
+                                    onClick={() => {
+                                        eventFormData.setFormData(event);
+                                        setAction('EDIT');
+                                    }}
+                                >
+                                    <EditIcon />
+                                </Button>
+                                <Button size="small" variant="contained"
+                                    sx={{ color: '#FFF' }}
+                                    onClick={() => {
+                                        eventFormData.setFormData(event);
+                                        setAction('VIEW');
+                                    }}
+                                >
+                                    <SearchIcon />
+                                </Button>
+                            </Box>
                         </Box>
                     ))}
                 </Box>
@@ -82,6 +95,12 @@ export function Events({ window }) {
                 <AbmEvents
                     eventFormData={eventFormData}
                     action={action}
+                    setAction={setAction}
+                />
+            }
+            {action === 'VIEW' &&
+                <WorkOnEvent
+                    eventFormData={eventFormData}
                     setAction={setAction}
                 />
             }

@@ -5,7 +5,7 @@ import { es } from "date-fns/locale"
 import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-import { useEvents } from "../hooks/useEvents";
+import { useEvents } from "../../hooks/useEvents";
 
 export function AbmEvents({ eventFormData, action, setAction }) {
 

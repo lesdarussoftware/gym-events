@@ -10,7 +10,7 @@ export function useEvents() {
     const { setSeverity, setMessage, setOpenMessage } = useContext(MessageContext);
 
     const [events, setEvents] = useState<Event[]>([]);
-    const [action, setAction] = useState<null | 'NEW' | 'EDIT'>(null);
+    const [action, setAction] = useState<null | 'NEW' | 'EDIT' | 'VIEW'>(null);
 
     async function getEvents(): Promise<void> {
         const data = await EventService.findAll();
