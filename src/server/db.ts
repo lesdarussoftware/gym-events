@@ -14,7 +14,7 @@ interface Participant {
     first_name: string;
     last_name: string;
     dni: string;
-    phone: string;
+    phone?: string;
     institution_name: string;
     institution_type: 'SCHOOL' | 'GYM';
 }

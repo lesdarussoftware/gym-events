@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { useEvents } from "../hooks/useEvents";
 import { useForm } from "../hooks/useForm";
@@ -36,10 +37,10 @@ export function Events({ window }) {
             {!action &&
                 <Button
                     variant="contained"
-                    sx={{ color: '#FFF', mt: 1, mb: 1 }}
+                    sx={{ color: '#FFF', mt: 1, mb: 3 }}
                     onClick={() => setAction('NEW')}
                 >
-                    Nuevo
+                    <AddCircleIcon />
                 </Button>
             }
             {!action && events.length === 0 &&

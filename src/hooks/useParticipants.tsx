@@ -2,19 +2,19 @@ import { useContext, useState } from "react";
 
 import { MessageContext } from "../providers/MessageProvider";
 
-import { Event } from "../server/db";
-import { EventService } from "../server/events";
+import { Participant } from "../server/db";
+import { ParticipantService } from "../server/participants";
 
-export function useEvents() {
+export function useParticipants() {
 
     const { setSeverity, setMessage, setOpenMessage } = useContext(MessageContext);
 
-    const [events, setEvents] = useState<Event[]>([]);
+    const [participants, setParticipants] = useState<Participant[]>([]);
     const [action, setAction] = useState<null | 'NEW' | 'EDIT'>(null);
 
-    async function getEvents(): Promise<void> {
-        const data = await EventService.findAll();
-        setEvents(data);
+    async function getParticipants(): Promise<void> {
+        const data = await ParticipantService.findAll();
+        setParticipants(data);
     }
 
     async function handleSubmit(
@@ -30,15 +30,15 @@ export function useEvents() {
         if (!validate()) return;
         try {
             if (action === 'NEW') {
-                const id: number = await EventService.create({ ...formData, id: undefined });
-                setEvents(prevEvents => [...prevEvents, { id, ...formData }]);
-                setMessage('Evento registrado correctamente.');
+                const id: number = await ParticipantService.create({ ...formData, id: undefined });
+                setParticipants(prevParticipants => [...prevParticipants, { id, ...formData }]);
+                setMessage('Participante registrado correctamente.');
             }
             if (action === 'EDIT') {
-                await EventService.update(formData);
+                await ParticipantService.update(formData);
                 const id: number = formData.id!;
-                setEvents(prevEvents => [...prevEvents.filter(e => e.id !== id), formData]);
-                setMessage('Evento editado correctamente.');
+                setParticipants(prevParticipants => [...prevParticipants.filter(p => p.id !== id), formData]);
+                setMessage('Participante editado correctamente.');
             }
             reset();
             setSeverity('success');
@@ -56,8 +56,8 @@ export function useEvents() {
     }
 
     return {
-        events,
-        getEvents,
+        participants,
+        getParticipants,
         action,
         setAction,
         handleSubmit

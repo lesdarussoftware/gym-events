@@ -2,6 +2,8 @@ import { Box, Button, Checkbox, FormControl, FormControlLabel, Input, InputLabel
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { es } from "date-fns/locale"
+import SaveIcon from '@mui/icons-material/Save';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import { useEvents } from "../hooks/useEvents";
 
@@ -11,8 +13,8 @@ export function AbmEvents({ eventFormData, action, setAction }) {
     const { handleChange, formData, setFormData, errors, disabled, reset, validate, setDisabled } = eventFormData;
 
     return (
-        <Box sx={{ width: { xs: '100%', sm: '70%', maxWidth: '1000px' }, display: 'block', margin: 'auto' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ width: { xs: '100%', sm: '70%', maxWidth: '1000px' }, display: 'block', margin: 'auto', mt: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <Typography variant="h6">
                     {action === 'NEW' && 'Nuevo evento'}
                     {action === 'EDIT' && `Editar evento #${formData.id}`}
@@ -21,7 +23,7 @@ export function AbmEvents({ eventFormData, action, setAction }) {
                     reset();
                     setAction(null);
                 }}>
-                    Volver
+                    <KeyboardBackspaceIcon />
                 </Button>
             </Box>
             <form onChange={handleChange} onSubmit={(e) => handleSubmit(
@@ -33,7 +35,7 @@ export function AbmEvents({ eventFormData, action, setAction }) {
                 action,
                 setAction
             )}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     <Box sx={{ display: 'flex', gap: 3 }}>
                         <FormControl sx={{ width: '50%' }}>
                             <InputLabel htmlFor="name">Nombre</InputLabel>
@@ -110,14 +112,14 @@ export function AbmEvents({ eventFormData, action, setAction }) {
                             </Typography>
                         }
                     </Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'end' }}>
                         <Button
                             type="submit"
                             variant="contained"
-                            sx={{ width: '40%', color: '#fff' }}
+                            sx={{ color: '#fff', px: 2 }}
                             disabled={disabled}
                         >
-                            Guardar
+                            <SaveIcon sx={{ transform: 'scale(1.3)' }} />
                         </Button>
                     </Box>
                 </Box>
