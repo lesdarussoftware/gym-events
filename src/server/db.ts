@@ -15,40 +15,33 @@ interface Participant {
     last_name: string;
     dni: string;
     phone?: string;
-    institution_name: string;
-    institution_type: 'SCHOOL' | 'GYM';
+    institution_name?: string;
 }
 
 interface EventParticipant {
     id: number;
     event_id: number;
     participant_id: number;
-    participant_institution_name: string;
-    participant_institution_type: string;
-    level: number;
+    participant_institution_name?: string;
+    level: 'ESCUELA 1' | 'ESCUELA 2' | 'NIVEL 1' | 'NIVEL 2' | 'NIVEL 3' | 'NIVEL 4' | 'NIVEL 5' | 'NIVEL 6' | 'NIVEL 7' | 'NIVEL 8' | 'NIVEL 9';
     category: 'PULGUITAS' | 'PREMINI' | 'MINI' | 'PRE INFANTIL' | 'INFANTIL' | 'JUVENIL' | 'MAYORES';
-}
-
-interface Note {
-    id: number;
-    event_participant_id: number;
-    mode: 'SALTO' | 'PARALELAS' | 'VIGA' | 'SUELO';
-    value: number;
+    salto_note: number;
+    paralelas_note: number;
+    viga_note: number;
+    suelo_note: number;
 }
 
 const db = new Dexie('GymEventsDatabase') as Dexie & {
     events: EntityTable<Event, 'id'>;
     participants: EntityTable<Participant, 'id'>;
     events_participants: EntityTable<EventParticipant, 'id'>;
-    notes: EntityTable<Note, 'id'>;
 };
 
 db.version(1).stores({
     events: 'id++, name, description, date, location, is_active',
-    participants: 'id++, first_name, last_name, dni, phone, institution_id',
-    events_participants: 'id++, event_id, participant_id, participant_institution_name, participant_institution_type, level, category',
-    notes: 'id++, event_participant_id, mode, value',
+    participants: 'id++, first_name, last_name, dni, phone, institution_name',
+    events_participants: 'id++, event_id, participant_id, participant_institution_name, level, category, salto_note, paralelas_note, viga_note, suelo_note'
 });
 
-export type { Event, Participant, EventParticipant, Note };
+export type { Event, Participant, EventParticipant };
 export { db };

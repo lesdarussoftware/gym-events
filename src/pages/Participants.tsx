@@ -20,15 +20,13 @@ export function Participants({ window }) {
             dni: '',
             phone: '',
             institution_name: '',
-            institution_type: ''
         },
         rules: {
             first_name: { required: true, maxLength: 55 },
             last_name: { required: true, maxLength: 55 },
             dni: { required: true, maxLength: 10 },
             phone: { maxLength: 25 },
-            institution_name: { required: true, maxLength: 10 },
-            institution_type: { required: true }
+            institution_name: { maxLength: 10 }
         }
     });
 

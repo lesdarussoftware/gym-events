@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Input, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import { Box, Button, FormControl, Input, InputLabel, Typography } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
@@ -92,35 +92,9 @@ export function AbmParticipants({ participantFormData, action, setAction }) {
                         <FormControl sx={{ width: '50%' }}>
                             <InputLabel htmlFor="institution_name">Institución</InputLabel>
                             <Input id="institution_name" type="text" name="institution_name" value={formData.institution_name} />
-                            {errors.institution_name?.type === 'required' &&
-                                <Typography variant="caption" color="red" marginTop={1}>
-                                    * La institución es requerida.
-                                </Typography>
-                            }
                             {errors.institution_name?.type === 'maxLength' &&
                                 <Typography variant="caption" color="red" marginTop={1}>
                                     * La institución es demasiado larga.
-                                </Typography>
-                            }
-                        </FormControl>
-                        <FormControl sx={{ width: '50%' }}>
-                            <InputLabel id="institution-type-select">Tipo</InputLabel>
-                            <Select
-                                labelId="institution-type-select"
-                                id="institution-type"
-                                value={formData.institution_type}
-                                label="Tipo"
-                                name="institution-type"
-                                sx={{ width: '100%' }}
-                                onChange={handleChange}
-                            >
-                                <MenuItem value="">Seleccione</MenuItem>
-                                <MenuItem value="SCHOOL">ESCUELA</MenuItem>
-                                <MenuItem value="GYM">GIMNASIO</MenuItem>
-                            </Select>
-                            {errors.institution_type?.type === 'required' &&
-                                <Typography variant="caption" color="red" marginTop={1}>
-                                    * El tipo de institución es requerido.
                                 </Typography>
                             }
                         </FormControl>
