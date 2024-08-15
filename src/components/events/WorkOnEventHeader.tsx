@@ -3,7 +3,7 @@ import { format } from "date-fns";
 
 export function WorkOnEventHeader({ event }) {
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ mb: 3 }}>
             <Table>
                 <TableHead>
                     <TableRow>

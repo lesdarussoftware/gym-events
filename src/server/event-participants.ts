@@ -3,12 +3,17 @@ import { db, EventParticipant } from "./db";
 export class EventParticipantService {
 
     static async exists(event_id: number, participant_id: number): Promise<boolean> {
-        const event_participants = await EventParticipantService.findAll(event_id);
+        const event_participants = await db.events_participants.where({ event_id }).toArray();
         return event_participants.some(ev => ev.participant_id === participant_id);
     }
 
-    static async findAll(event_id: number): Promise<EventParticipant[]> {
-        const result = await db.events_participants.where({ event_id }).toArray();
+    static async findAll({ event_id, participant_id, level, category }: {
+        event_id: number;
+        participant_id: number;
+        level: string;
+        category: string;
+    }): Promise<EventParticipant[]> {
+        const result = await db.events_participants.where({ event_id, participant_id, level, category }).toArray();
         return result;
     }
 

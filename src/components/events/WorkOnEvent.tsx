@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography, Tabs, Tab } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import { useParticipants } from "../../hooks/useParticipants";
 
 import { WorkOnEventHeader } from "./WorkOnEventHeader";
-import { Accordion, AccordionDetails, AccordionSummary } from "../AccordionComponents";
+import { Accordion, AccordionDetails, AccordionSummary } from "./AccordionComponents";
+import { TabsComponent } from "./TabsComponent";
 
-import { CATEGORIES, LEVELS } from "../../helpers/constants";
+import { LEVELS } from "../../helpers/constants";
 
 export function WorkOnEvent({ eventFormData, setAction }) {
 
@@ -15,7 +16,7 @@ export function WorkOnEvent({ eventFormData, setAction }) {
 
     const { getParticipants } = useParticipants();
 
-    const [expanded, setExpanded] = useState<string | false>('panel0');
+    const [expanded, setExpanded] = useState<string | false>(false);
 
     const handleChangeAccordion = (panel: string) => (_: any, newExpanded: boolean) => {
         setExpanded(newExpanded ? panel : false);
@@ -28,12 +29,13 @@ export function WorkOnEvent({ eventFormData, setAction }) {
     return (
         <Box sx={{ width: { xs: '100%', md: '70%', maxWidth: '1500px' }, display: 'block', margin: 'auto', mt: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                <Typography variant="h6">{event.name}</Typography>
+                <Typography variant="h6">{`Evento #${event.id} ${event.name}`}</Typography>
                 <Button variant="outlined" onClick={() => setAction(null)}>
                     <KeyboardBackspaceIcon />
                 </Button>
             </Box>
             <WorkOnEventHeader event={event} />
+            <Typography variant="h6">Detalles</Typography>
             {LEVELS.map((level, lvlIdx) => (
                 <Accordion
                     key={lvlIdx}
@@ -44,7 +46,7 @@ export function WorkOnEvent({ eventFormData, setAction }) {
                         <Typography>{level}</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-
+                        <TabsComponent level={level} event_id={event.id} />
                     </AccordionDetails>
                 </Accordion>
             ))}
