@@ -6,7 +6,7 @@ import { useParticipants } from "../../hooks/useParticipants";
 
 import { WorkOnEventHeader } from "./WorkOnEventHeader";
 import { Accordion, AccordionDetails, AccordionSummary } from "./AccordionComponents";
-import { TabsComponent } from "./TabsComponent";
+import { TabsComponent } from "../tabs/TabsComponent";
 
 import { LEVELS } from "../../helpers/constants";
 
@@ -53,25 +53,3 @@ export function WorkOnEvent({ eventFormData, setAction }) {
         </Box>
     );
 }
-
-{/* <FormControl sx={{ width: '50%' }}>
-                <InputLabel id="institution-type-select">Tipo</InputLabel>
-                <Select
-                    labelId="institution-type-select"
-                    id="institution-type"
-                    value={formData.institution_type}
-                    label="Tipo"
-                    name="institution-type"
-                    sx={{ width: '100%' }}
-                    onChange={handleChange}
-                >
-                    <MenuItem value="">Seleccione</MenuItem>
-                    <MenuItem value="SCHOOL">ESCUELA</MenuItem>
-                    <MenuItem value="GYM">GIMNASIO</MenuItem>
-                </Select>
-                {errors.institution_type?.type === 'required' &&
-                    <Typography variant="caption" color="red" marginTop={1}>
-                        * El tipo de institución es requerido.
-                    </Typography>
-                }
-            </FormControl> */}

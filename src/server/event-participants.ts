@@ -19,4 +19,13 @@ export class EventParticipantService {
         return id;
     }
 
+    static async update(data: Partial<EventParticipant>): Promise<void> {
+        await db.events_participants.update(data.id!, {
+            salto_note: data.salto_note,
+            paralelas_note: data.paralelas_note,
+            viga_note: data.viga_note,
+            suelo_note: data.suelo_note
+        });
+    }
+
 }
