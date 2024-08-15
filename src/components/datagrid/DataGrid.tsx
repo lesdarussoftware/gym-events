@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import EditIcon from '@mui/icons-material/Edit';
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { EnhancedTableHead } from './EnhancedTableHead';
 
@@ -101,7 +101,7 @@ export function DataGrid({
                                                 tabIndex={-1}
                                                 key={row.id}
                                             >
-                                                <TableCell sx={{ width: "auto" }}>
+                                                <TableCell>
                                                     <Box sx={{
                                                         display: "flex",
                                                         justifyContent: "center",
@@ -122,8 +122,8 @@ export function DataGrid({
                                                                     if (setAction) setAction("EDIT");
                                                                 }}
                                                             >
-                                                                <IconButton className="rounded-full bg-black/20 opacity-50 hover:bg-[#288bcd]">
-                                                                    <EditIcon className="w-4 h-4 hover:text-white" />
+                                                                <IconButton>
+                                                                    <EditIcon />
                                                                 </IconButton>
                                                             </Tooltip>
                                                         }
@@ -139,11 +139,8 @@ export function DataGrid({
                                                                     if (setAction) setAction("DELETE");
                                                                 }}
                                                             >
-                                                                <IconButton
-                                                                    className="rounded-full bg-black/20 opacity-50 hover:bg-[#288bcd]"
-                                                                    aria-label="delete"
-                                                                >
-                                                                    <CloseIcon className="w-4 h-4 hover:text-white" />
+                                                                <IconButton aria-label="delete">
+                                                                    <DeleteForeverIcon />
                                                                 </IconButton>
                                                             </Tooltip>
                                                         }
@@ -181,7 +178,7 @@ export function DataGrid({
                             }
                             {emptyRows > 0 && (
                                 <TableRow style={{ height: 33 * emptyRows }}>
-                                    <TableCell colSpan={6} />
+                                    <TableCell colSpan={headCells.length + 1} />
                                 </TableRow>
                             )}
                         </TableBody>

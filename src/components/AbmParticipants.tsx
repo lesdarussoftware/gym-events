@@ -72,9 +72,14 @@ export function AbmParticipants({ participantFormData, action, setAction }) {
                                     * El DNI es requerido.
                                 </Typography>
                             }
+                            {errors.dni?.type === 'minLength' &&
+                                <Typography variant="caption" color="red" marginTop={1}>
+                                    * El DNI es demasiado corto.
+                                </Typography>
+                            }
                             {errors.dni?.type === 'maxLength' &&
                                 <Typography variant="caption" color="red" marginTop={1}>
-                                    * El lugar es demasiado largo.
+                                    * El DNI es demasiado largo.
                                 </Typography>
                             }
                         </FormControl>

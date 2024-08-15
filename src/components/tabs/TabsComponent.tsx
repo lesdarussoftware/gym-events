@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Tabs, Tab, Box, Typography } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import { useEventParticipants } from '../../hooks/useEventParticipants';
 import { useParticipants } from '../../hooks/useParticipants';
@@ -21,6 +23,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
     const { formData, handleChange, setFormData, errors, disabled, validate, reset, setDisabled } = useForm({
         defaultData: {
             id: '',
+            participant: '',
             event_id,
             participant_id: '',
             participant_institution_name: '',
@@ -52,10 +55,6 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
         }
     }, [formData.participant_id])
 
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
-
     const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => setValue(newValue);
 
     const handleClose = () => {
@@ -77,6 +76,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                         rows={eventParticipants.filter(ev => ev.category === cat)}
                         setAction={setAction}
                         setData={setFormData}
+                        defaultOrderBy='total'
                         showEditAction
                         showDeleteAction
                         contentHeader={
@@ -123,6 +123,29 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                     disabled={disabled}
                     handleClose={handleClose}
                 />
+            </ModalComponent>
+            <ModalComponent open={action === 'DELETE'} onClose={handleClose}>
+                <Typography variant='h6' mb={1}>
+                    {`¿Eliminar el registro de ${formData.participant.first_name} ${formData.participant.last_name}
+                     (${formData.participant.dni}) del nivel ${formData.level} y la categoría ${formData.category}?`}
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>
+                    <Button
+                        type="button"
+                        variant="contained"
+                        sx={{ color: '#fff', px: 2 }}
+                    >
+                        <CheckCircleOutlineIcon sx={{ transform: 'scale(1.3)' }} />
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="outlined"
+                        sx={{ px: 2 }}
+                        onClick={handleClose}
+                    >
+                        <HighlightOffIcon sx={{ transform: 'scale(1.3)' }} />
+                    </Button>
+                </Box>
             </ModalComponent>
         </Box>
     );

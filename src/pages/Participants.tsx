@@ -24,7 +24,7 @@ export function Participants({ window }) {
         rules: {
             first_name: { required: true, maxLength: 55 },
             last_name: { required: true, maxLength: 55 },
-            dni: { required: true, maxLength: 10 },
+            dni: { required: true, minLength: 6, maxLength: 10 },
             phone: { maxLength: 25 },
             institution_name: { maxLength: 55 }
         }

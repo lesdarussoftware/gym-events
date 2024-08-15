@@ -1,20 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useMemo, useState } from "react";
 
 import { MessageContext } from "../providers/MessageProvider";
 
-import { EventParticipant } from "../server/db";
+import { EventParticipant, Participant } from "../server/db";
 import { EventParticipantService } from "../server/event-participants";
+import { ParticipantService } from "../server/participants";
 
 export function useEventParticipants() {
 
     const { setSeverity, setMessage, setOpenMessage } = useContext(MessageContext);
 
+    const [participants, setParticipants] = useState<Participant[]>([]);
     const [eventParticipants, setEventParticipants] = useState<EventParticipant[]>([]);
     const [action, setAction] = useState<null | 'NEW' | 'EDIT' | 'DELETE'>(null);
 
     async function getEventParticipants(event_id: number): Promise<void> {
+        const dataParticipants = await ParticipantService.findAll();
+        setParticipants(dataParticipants);
         const data = await EventParticipantService.findAll(event_id);
-        setEventParticipants(data);
+        setEventParticipants(data.map(ev => {
+            const participant = dataParticipants.find(p => p.id === ev.participant_id)!;
+            return { ...ev, participant };
+        }));
     }
 
     async function handleSubmit(
@@ -30,14 +38,20 @@ export function useEventParticipants() {
         if (!validate()) return;
         try {
             if (action === 'NEW') {
-                const id: number = await EventParticipantService.create({ ...formData, id: undefined });
-                setEventParticipants(prev => [...prev, { id, ...formData }]);
+                const id: number = await EventParticipantService.create({
+                    ...formData,
+                    id: undefined,
+                    participant: undefined
+                });
+                setEventParticipants(prev => [...prev, {
+                    ...formData, id,
+                    participant: participants.find(p => p.id === formData.participant_id)!
+                }]);
                 setMessage('Participante registrado correctamente.');
             }
             if (action === 'EDIT') {
                 await EventParticipantService.update(formData);
-                const id: number = formData.id!;
-                setEventParticipants(prev => [...prev.filter(p => p.id !== id), formData]);
+                setEventParticipants(prev => [...prev.filter(p => p.id !== formData.id), formData]);
                 setMessage('Notas editadas correctamente.');
             }
             reset();
@@ -69,8 +83,8 @@ export function useEventParticipants() {
             numeric: false,
             disablePadding: true,
             label: 'Nombre',
-            sorter: (row: EventParticipant) => row.participant_id,
-            accessor: 'participant_id'
+            sorter: (row: EventParticipant & { participant: Participant }) => `${row.participant.first_name} ${row.participant.last_name}`,
+            accessor: (row: EventParticipant & { participant: Participant }) => `${row.participant.first_name} ${row.participant.last_name}`
         },
         {
             id: 'participant_institution_name',
