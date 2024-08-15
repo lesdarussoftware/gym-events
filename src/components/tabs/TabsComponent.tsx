@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Button, Tabs, Tab, Box, FormControl, InputLabel, Select, MenuItem, Typography, Input, TextField } from '@mui/material';
+import { Button, Tabs, Tab, Box, Typography } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SaveIcon from '@mui/icons-material/Save';
 
 import { useEventParticipants } from '../../hooks/useEventParticipants';
+import { useParticipants } from '../../hooks/useParticipants';
+import { useForm } from '../../hooks/useForm';
 
 import { DataGrid } from '../datagrid/DataGrid';
 import { ModalComponent } from '../ModalComponent';
 import { CustomTabPanel } from './CustomTabPanel';
+import { AbmEventParticipants } from '../AbmEventParticipants';
 
 import { CATEGORIES } from '../../helpers/constants';
 import { a11yProps } from '../../helpers/utils';
-import { useParticipants } from '../../hooks/useParticipants';
-import { useForm } from '../../hooks/useForm';
 
 export function TabsComponent({ level, event_id }: { level: string; event_id: number }) {
 
@@ -58,6 +58,11 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
 
     const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => setValue(newValue);
 
+    const handleClose = () => {
+        setAction(null)
+        reset();
+    }
+
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -71,6 +76,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                         headCells={headCells}
                         rows={eventParticipants.filter(ev => ev.category === cat)}
                         setAction={setAction}
+                        setData={setFormData}
                         showEditAction
                         showDeleteAction
                         contentHeader={
@@ -92,98 +98,31 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                     />
                 </CustomTabPanel>
             ))}
-            <ModalComponent open={action === 'NEW' || action === 'EDIT'} onClose={() => setAction(null)}>
+            <ModalComponent open={action === 'NEW' || action === 'EDIT'} onClose={handleClose}>
                 <Typography variant='h6' mb={1}>
                     {action === 'NEW' && 'Nuevo registro'}
                     {action === 'EDIT' && `Editar registro #${formData.id}`}
                 </Typography>
-                <form
-                    onChange={handleChange}
-                    onSubmit={e => handleSubmit(e, formData, validate, reset, setDisabled, action, setAction)}
-                >
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <FormControl sx={{ width: '100%' }}>
-                            <InputLabel id="participant-select">Participante</InputLabel>
-                            <Select
-                                labelId="participant-select"
-                                id="participant_id"
-                                value={formData.participant_id}
-                                label="Participante"
-                                name="participant_id"
-                                sx={{ width: '100%' }}
-                                onChange={handleChange}
-                            >
-                                <MenuItem value="">Seleccione</MenuItem>
-                                {participants.map(p => (
-                                    <MenuItem key={p.id} value={p.id}>{`${p.first_name} ${p.last_name}`}</MenuItem>
-                                ))}
-                            </Select>
-                            {errors.participant_id?.type === 'required' &&
-                                <Typography variant="caption" color="red" marginTop={1}>
-                                    * El participante es requerido.
-                                </Typography>
-                            }
-                        </FormControl>
-                        {action === 'EDIT' &&
-                            <>
-                                <FormControl>
-                                    <TextField
-                                        label="Nota Salto"
-                                        type="number"
-                                        name='salto_note'
-                                        value={formData.salto_note}
-                                        onChange={handleChange}
-                                        inputProps={{ step: 0.01, min: 0 }}
-                                        variant="outlined"
-                                    />
-                                </FormControl>
-                                <FormControl>
-                                    <TextField
-                                        label="Nota Paralelas"
-                                        type="number"
-                                        name='paralelas_note'
-                                        value={formData.paralelas_note}
-                                        onChange={handleChange}
-                                        inputProps={{ step: 0.01, min: 0 }}
-                                        variant="outlined"
-                                    />
-                                </FormControl>
-                                <FormControl>
-                                    <TextField
-                                        label="Nota Viga"
-                                        type="number"
-                                        name='viga_note'
-                                        value={formData.viga_note}
-                                        onChange={handleChange}
-                                        inputProps={{ step: 0.01, min: 0 }}
-                                        variant="outlined"
-                                    />
-                                </FormControl>
-                                <FormControl>
-                                    <TextField
-                                        label="Nota Suelo"
-                                        type="number"
-                                        name='suelo_note'
-                                        value={formData.suelo_note}
-                                        onChange={handleChange}
-                                        inputProps={{ step: 0.01, min: 0 }}
-                                        variant="outlined"
-                                    />
-                                </FormControl>
-                            </>
-                        }
-                        <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                sx={{ color: '#fff', px: 2 }}
-                                disabled={disabled}
-                            >
-                                <SaveIcon sx={{ transform: 'scale(1.3)' }} />
-                            </Button>
-                        </Box>
-                    </Box>
-                </form>
+                <Typography variant='body1' mb={1}>
+                    {formData.level}
+                </Typography>
+                <Typography variant='body1' mb={1}>
+                    {formData.category}
+                </Typography>
+                <AbmEventParticipants
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    formData={formData}
+                    validate={validate}
+                    reset={reset}
+                    setDisabled={setDisabled}
+                    action={action}
+                    setAction={setAction}
+                    participants={participants}
+                    errors={errors}
+                    disabled={disabled}
+                    handleClose={handleClose}
+                />
             </ModalComponent>
         </Box>
     );
