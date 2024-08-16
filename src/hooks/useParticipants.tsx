@@ -10,7 +10,7 @@ export function useParticipants() {
     const { setSeverity, setMessage, setOpenMessage } = useContext(MessageContext);
 
     const [participants, setParticipants] = useState<Participant[]>([]);
-    const [action, setAction] = useState<null | 'NEW' | 'EDIT'>(null);
+    const [action, setAction] = useState<null | 'NEW' | 'EDIT' | 'DELETE'>(null);
 
     async function getParticipants(): Promise<void> {
         const data = await ParticipantService.findAll();
@@ -55,11 +55,31 @@ export function useParticipants() {
         setOpenMessage(true);
     }
 
+    async function destroy(id: number, reset: () => void, setAction: (arg0: null) => void): Promise<void> {
+        try {
+            await ParticipantService.destroy(id);
+            setParticipants(prev => [...prev.filter(p => p.id !== id)]);
+            setMessage('Participante eliminado correctamente.');
+            setSeverity('success');
+            setAction(null);
+            reset();
+        } catch (e) {
+            setSeverity('error');
+            if (e instanceof Error) {
+                setMessage(`Ocurrió un error: ${e.message}`);
+            } else {
+                setMessage('Ocurrió un error inesperado.');
+            }
+        }
+        setOpenMessage(true);
+    }
+
     return {
         participants,
         getParticipants,
         action,
         setAction,
-        handleSubmit
+        handleSubmit,
+        destroy
     };
 }

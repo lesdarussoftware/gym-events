@@ -3,6 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { useEvents } from "../hooks/useEvents";
 import { useForm } from "../hooks/useForm";
@@ -10,10 +11,11 @@ import { useForm } from "../hooks/useForm";
 import { Layout } from "../components/Layout";
 import { AbmEvents } from "../components/events/AbmEvents";
 import { WorkOnEvent } from "../components/events/WorkOnEvent";
+import { ModalComponent } from "../components/ModalComponent";
 
 export function Events({ window }) {
 
-    const { events, getEvents, action, setAction } = useEvents();
+    const { events, getEvents, action, setAction, destroy } = useEvents();
     const eventFormData = useForm({
         defaultData: {
             id: '',
@@ -36,7 +38,7 @@ export function Events({ window }) {
 
     return (
         <Layout window={window}>
-            {!action &&
+            {(!action || action === 'DELETE') &&
                 <Button
                     variant="contained"
                     sx={{ color: '#FFF', mt: 1, mb: 3 }}
@@ -50,7 +52,7 @@ export function Events({ window }) {
                     No hay eventos registrados.
                 </Typography>
             }
-            {!action && events.length > 0 &&
+            {(!action || action === 'DELETE') && events.length > 0 &&
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'space-between' }}>
                     {events.map((event) => (
                         <Box
@@ -68,6 +70,15 @@ export function Events({ window }) {
                         >
                             <Typography variant="h6">{`#${event.id} ${event.name}`}</Typography>
                             <Box sx={{ display: 'flex', gap: 1 }}>
+                                <Button size="small" variant="contained"
+                                    sx={{ color: '#FFF' }}
+                                    onClick={() => {
+                                        eventFormData.setFormData(event);
+                                        setAction('DELETE');
+                                    }}
+                                >
+                                    <DeleteForeverIcon />
+                                </Button>
                                 <Button size="small" variant="contained"
                                     sx={{ color: '#FFF' }}
                                     onClick={() => {
@@ -104,6 +115,32 @@ export function Events({ window }) {
                     setAction={setAction}
                 />
             }
+            <ModalComponent open={action === 'DELETE'} onClose={() => setAction(null)}>
+                <Typography variant='h6' align='center' mb={1}>
+                    {`¿Eliminar el registro de ${eventFormData.formData?.name}?`}
+                </Typography>
+                <Typography variant='body1' align='center' mb={3}>
+                    Se eliminarán todos los datos relacionados a este evento y no podrán ser recuperados.
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>
+                    <Button
+                        type="button"
+                        variant="contained"
+                        sx={{ color: '#fff', px: 2 }}
+                        onClick={() => destroy(eventFormData.formData.id, eventFormData.reset, setAction)}
+                    >
+                        Eliminar
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="outlined"
+                        sx={{ px: 2 }}
+                        onClick={() => setAction(null)}
+                    >
+                        Cancelar
+                    </Button>
+                </Box>
+            </ModalComponent>
         </Layout>
     );
 }

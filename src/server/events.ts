@@ -27,4 +27,11 @@ export class EventService {
         await db.events.update(updatedEvent.id!, updatedEvent);
     }
 
+    static async destroy(id: number): Promise<number> {
+        const eventParticipants = await db.events_participants.where({ event_id: id }).toArray();
+        await db.events_participants.bulkDelete(eventParticipants.map(ep => ep.id));
+        await db.events.delete(id);
+        return id;
+    }
+
 }

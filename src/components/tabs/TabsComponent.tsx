@@ -127,6 +127,9 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                     {`¿Eliminar el registro de ${formData.participant.first_name} ${formData.participant.last_name}
                      (${formData.participant.dni}) del nivel ${formData.level} y la categoría ${formData.category}?`}
                 </Typography>
+                <Typography variant='body1' align='center' mb={3}>
+                    Los datos no podrán ser recuperados.
+                </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>
                     <Button
                         type="button"

@@ -27,4 +27,11 @@ export class ParticipantService {
         await db.participants.update(updatedParticipant.id!, updatedParticipant);
     }
 
+    static async destroy(id: number): Promise<number> {
+        const eventParticipants = await db.events_participants.where({ participant_id: id }).toArray();
+        await db.events_participants.bulkDelete(eventParticipants.map(ep => ep.id));
+        await db.participants.delete(id);
+        return id;
+    }
+
 }

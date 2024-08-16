@@ -10,7 +10,7 @@ export function useEvents() {
     const { setSeverity, setMessage, setOpenMessage } = useContext(MessageContext);
 
     const [events, setEvents] = useState<Event[]>([]);
-    const [action, setAction] = useState<null | 'NEW' | 'EDIT' | 'VIEW'>(null);
+    const [action, setAction] = useState<null | 'NEW' | 'EDIT' | 'VIEW' | 'DELETE'>(null);
 
     async function getEvents(): Promise<void> {
         const data = await EventService.findAll();
@@ -55,11 +55,31 @@ export function useEvents() {
         setOpenMessage(true);
     }
 
+    async function destroy(id: number, reset: () => void, setAction: (arg0: null) => void): Promise<void> {
+        try {
+            await EventService.destroy(id);
+            setEvents(prev => [...prev.filter(e => e.id !== id)]);
+            setMessage('Evento eliminado correctamente.');
+            setSeverity('success');
+            setAction(null);
+            reset();
+        } catch (e) {
+            setSeverity('error');
+            if (e instanceof Error) {
+                setMessage(`Ocurrió un error: ${e.message}`);
+            } else {
+                setMessage('Ocurrió un error inesperado.');
+            }
+        }
+        setOpenMessage(true);
+    }
+
     return {
         events,
         getEvents,
         action,
         setAction,
-        handleSubmit
+        handleSubmit,
+        destroy
     };
 }
