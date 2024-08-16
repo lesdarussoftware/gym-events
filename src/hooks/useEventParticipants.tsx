@@ -15,7 +15,7 @@ export function useEventParticipants() {
     const [eventParticipants, setEventParticipants] = useState<EventParticipant[]>([]);
     const [action, setAction] = useState<null | 'NEW' | 'EDIT' | 'DELETE'>(null);
 
-    async function getEventParticipants(event_id: number): Promise<void> {
+    async function getAll(event_id: number): Promise<void> {
         const dataParticipants = await ParticipantService.findAll();
         setParticipants(dataParticipants);
         const data = await EventParticipantService.findAll(event_id);
@@ -66,6 +66,25 @@ export function useEventParticipants() {
             }
         }
         setDisabled(false);
+        setOpenMessage(true);
+    }
+
+    async function destroy(id: number, reset: () => void, setAction: (arg0: null) => void): Promise<void> {
+        try {
+            await EventParticipantService.destroy(id);
+            setEventParticipants(prev => [...prev.filter(ev => ev.id !== id)]);
+            setMessage('Registro eliminado correctamente.');
+            setSeverity('success');
+            setAction(null);
+            reset();
+        } catch (e) {
+            setSeverity('error');
+            if (e instanceof Error) {
+                setMessage(`Ocurrió un error: ${e.message}`);
+            } else {
+                setMessage('Ocurrió un error inesperado.');
+            }
+        }
         setOpenMessage(true);
     }
 
@@ -138,10 +157,11 @@ export function useEventParticipants() {
 
     return {
         eventParticipants,
-        getEventParticipants,
+        getAll,
         action,
         setAction,
         headCells,
-        handleSubmit
+        handleSubmit,
+        destroy
     };
 }

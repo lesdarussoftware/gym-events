@@ -19,7 +19,7 @@ import { a11yProps } from '../../helpers/utils';
 export function TabsComponent({ level, event_id }: { level: string; event_id: number }) {
 
     const { getParticipants, participants } = useParticipants();
-    const { getEventParticipants, eventParticipants, action, setAction, headCells, handleSubmit } = useEventParticipants();
+    const { getAll, eventParticipants, action, setAction, headCells, handleSubmit, destroy } = useEventParticipants();
     const { formData, handleChange, setFormData, errors, disabled, validate, reset, setDisabled } = useForm({
         defaultData: {
             id: '',
@@ -43,7 +43,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
 
     useEffect(() => {
         getParticipants();
-        getEventParticipants(event_id);
+        getAll(event_id);
     }, []);
 
     useEffect(() => {
@@ -134,6 +134,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                         type="button"
                         variant="contained"
                         sx={{ color: '#fff', px: 2 }}
+                        onClick={() => destroy(formData.id, reset, setAction)}
                     >
                         <CheckCircleOutlineIcon sx={{ transform: 'scale(1.3)' }} />
                     </Button>

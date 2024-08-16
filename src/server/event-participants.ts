@@ -28,4 +28,9 @@ export class EventParticipantService {
         });
     }
 
+    static async destroy(id: number): Promise<number> {
+        await db.events_participants.delete(id);
+        return id;
+    }
+
 }
