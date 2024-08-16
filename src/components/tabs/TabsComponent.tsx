@@ -38,6 +38,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
     });
 
     const [value, setValue] = useState(0);
+    const [confirmDelete, setConfirmDelete] = useState(false);
 
     useEffect(() => {
         getParticipants();
@@ -56,8 +57,9 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
     const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => setValue(newValue);
 
     const handleClose = () => {
-        setAction(null)
+        setAction(null);
         reset();
+        if (confirmDelete) setConfirmDelete(false);
     }
 
     return (
@@ -130,12 +132,24 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                 <Typography variant='body1' align='center' mb={3}>
                     Los datos no podrán ser recuperados.
                 </Typography>
+                {confirmDelete &&
+                    <Typography variant='body1' align='right' sx={{ color: '#F00', marginBottom: 2 }}>
+                        Confirme eliminación de datos
+                    </Typography>
+                }
                 <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>
                     <Button
                         type="button"
                         variant="contained"
                         sx={{ color: '#fff', px: 2 }}
-                        onClick={() => destroy(formData.id, reset, setAction)}
+                        onClick={async () => {
+                            if (confirmDelete) {
+                                await destroy(formData.id, reset, setAction)
+                                setConfirmDelete(false)
+                            } else {
+                                setConfirmDelete(true)
+                            }
+                        }}
                     >
                         Eliminar
                     </Button>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -32,9 +32,16 @@ export function Participants({ window }) {
         }
     });
 
+    const [confirmDelete, setConfirmDelete] = useState(false);
+
     useEffect(() => {
         if (!action) getParticipants();
     }, [action])
+
+    const handleClose = () => {
+        setAction(null);
+        if (confirmDelete) setConfirmDelete(false);
+    }
 
     return (
         <Layout window={window}>
@@ -102,7 +109,7 @@ export function Participants({ window }) {
                     setAction={setAction}
                 />
             }
-            <ModalComponent open={action === 'DELETE'} onClose={() => setAction(null)}>
+            <ModalComponent open={action === 'DELETE'} onClose={handleClose}>
                 <Typography variant='h6' align='center' mb={1}>
                     {`¿Eliminar el registro de ${participantFormData.formData?.first_name} 
                     ${participantFormData.formData?.last_name} (${participantFormData.formData?.dni})?`}
@@ -110,12 +117,24 @@ export function Participants({ window }) {
                 <Typography variant='body1' align='center' mb={3}>
                     Se eliminarán todos los datos relacionados a este participante y no podrán ser recuperados.
                 </Typography>
+                {confirmDelete &&
+                    <Typography variant='body1' align='right' sx={{ color: '#F00', marginBottom: 2 }}>
+                        Confirme eliminación de datos
+                    </Typography>
+                }
                 <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>
                     <Button
                         type="button"
                         variant="contained"
                         sx={{ color: '#fff', px: 2 }}
-                        onClick={() => destroy(participantFormData.formData.id, participantFormData.reset, setAction)}
+                        onClick={async () => {
+                            if (confirmDelete) {
+                                await destroy(participantFormData.formData.id, participantFormData.reset, setAction)
+                                setConfirmDelete(false)
+                            } else {
+                                setConfirmDelete(true)
+                            }
+                        }}
                     >
                         Eliminar
                     </Button>
@@ -123,7 +142,7 @@ export function Participants({ window }) {
                         type="button"
                         variant="outlined"
                         sx={{ px: 2 }}
-                        onClick={() => setAction(null)}
+                        onClick={handleClose}
                     >
                         Cancelar
                     </Button>
