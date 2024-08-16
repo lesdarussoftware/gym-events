@@ -1,3 +1,5 @@
+import { EventParticipant } from "../server/db";
+
 function descendingComparator(a: { [x: string]: any; }, b: { [x: string]: any; }, orderBy: string | number, sorter: (arg0: any) => any) {
     if ((b[orderBy] ? b[orderBy] : sorter(b)) < (a[orderBy] ? a[orderBy] : sorter(a))) {
         return -1;
@@ -31,4 +33,17 @@ export function a11yProps(index: number) {
         id: `simple-tab-${index}`,
         'aria-controls': `simple-tabpanel-${index}`,
     };
+}
+
+export function getTotal(eventParticipant: EventParticipant): number {
+    const { viga_note, salto_note, paralelas_note, suelo_note } = eventParticipant;
+
+    const viga = Number(viga_note) || 0;
+    const salto = Number(salto_note) || 0;
+    const paralelas = Number(paralelas_note) || 0;
+    const suelo = Number(suelo_note) || 0;
+
+    const total = viga + suelo + paralelas + salto;
+
+    return parseFloat(total.toFixed(3));
 }

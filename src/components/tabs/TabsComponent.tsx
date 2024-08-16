@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Tabs, Tab, Box, Typography } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import { useEventParticipants } from '../../hooks/useEventParticipants';
 import { useParticipants } from '../../hooks/useParticipants';
@@ -80,7 +78,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                         showEditAction
                         showDeleteAction
                         contentHeader={
-                            <Box sx={{ display: 'flex', justifyContent: 'end', pr: 1 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'end', p: 1, pb: 0 }}>
                                 <Button
                                     variant='contained'
                                     size="small"
@@ -125,7 +123,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                 />
             </ModalComponent>
             <ModalComponent open={action === 'DELETE'} onClose={handleClose}>
-                <Typography variant='h6' mb={1}>
+                <Typography variant='h6' align='center' mb={3}>
                     {`¿Eliminar el registro de ${formData.participant.first_name} ${formData.participant.last_name}
                      (${formData.participant.dni}) del nivel ${formData.level} y la categoría ${formData.category}?`}
                 </Typography>
@@ -136,7 +134,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                         sx={{ color: '#fff', px: 2 }}
                         onClick={() => destroy(formData.id, reset, setAction)}
                     >
-                        <CheckCircleOutlineIcon sx={{ transform: 'scale(1.3)' }} />
+                        Eliminar
                     </Button>
                     <Button
                         type="button"
@@ -144,7 +142,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                         sx={{ px: 2 }}
                         onClick={handleClose}
                     >
-                        <HighlightOffIcon sx={{ transform: 'scale(1.3)' }} />
+                        Cancelar
                     </Button>
                 </Box>
             </ModalComponent>

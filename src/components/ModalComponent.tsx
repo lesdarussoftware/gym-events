@@ -1,17 +1,6 @@
-import { useState } from 'react';
 import { Backdrop, Box, Modal, Fade } from '@mui/material';
 
-export function ModalComponent({ children, open, onClose, reduceWidth = 800 }) {
-
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth < 700 ? window.innerWidth : window.innerWidth - reduceWidth)
-
-    window.onresize = () => {
-        if (window.innerWidth < 700) {
-            setScreenWidth(window.innerWidth)
-        } else {
-            setScreenWidth(window.innerWidth - 300)
-        }
-    }
+export function ModalComponent({ children, open, onClose }) {
 
     const style = {
         position: 'absolute',
@@ -22,7 +11,7 @@ export function ModalComponent({ children, open, onClose, reduceWidth = 800 }) {
         boxShadow: 24,
         padding: 2,
         borderRadius: 1,
-        width: screenWidth,
+        width: '80vw',
         maxWidth: 1300
     }
 
@@ -36,7 +25,7 @@ export function ModalComponent({ children, open, onClose, reduceWidth = 800 }) {
             slots={{ backdrop: Backdrop }}
             slotProps={{
                 backdrop: {
-                    timeout: 500,
+                    timeout: 10,
                 },
             }}
         >

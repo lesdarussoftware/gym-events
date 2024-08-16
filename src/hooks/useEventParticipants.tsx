@@ -7,6 +7,8 @@ import { EventParticipant, Participant } from "../server/db";
 import { EventParticipantService } from "../server/event-participants";
 import { ParticipantService } from "../server/participants";
 
+import { getTotal } from "../helpers/utils";
+
 export function useEventParticipants() {
 
     const { setSeverity, setMessage, setOpenMessage } = useContext(MessageContext);
@@ -109,7 +111,7 @@ export function useEventParticipants() {
             id: 'participant_institution_name',
             numeric: false,
             disablePadding: true,
-            label: 'Institución',
+            label: 'Gym / Esc.',
             sorter: (row: EventParticipant) => row.participant_institution_name,
             accessor: 'participant_institution_name'
         },
@@ -125,7 +127,7 @@ export function useEventParticipants() {
             id: 'paralelas_note',
             numeric: false,
             disablePadding: true,
-            label: 'Paralelas',
+            label: 'Paral.',
             sorter: (row: EventParticipant) => row.paralelas_note,
             accessor: 'paralelas_note'
         },
@@ -151,7 +153,7 @@ export function useEventParticipants() {
             disablePadding: true,
             label: 'Total',
             sorter: (row: EventParticipant) => row.id,
-            accessor: () => '0.00'
+            accessor: (row: EventParticipant) => getTotal(row)
         },
     ], []);
 

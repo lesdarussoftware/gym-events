@@ -1,8 +1,8 @@
 import { Button, Box, FormControl, InputLabel, Select, MenuItem, Typography, TextField } from '@mui/material';
-import SaveIcon from '@mui/icons-material/Save';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import { Participant } from '../server/db';
+
+import { getTotal } from '../helpers/utils';
 
 export function AbmEventParticipants({
     handleChange,
@@ -23,7 +23,7 @@ export function AbmEventParticipants({
             onChange={handleChange}
             onSubmit={e => handleSubmit(e, formData, validate, reset, setDisabled, action, setAction)}
         >
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 3 }}>
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="participant-select">Participante</InputLabel>
                     <Select
@@ -34,6 +34,7 @@ export function AbmEventParticipants({
                         name="participant_id"
                         sx={{ width: '100%' }}
                         onChange={handleChange}
+                        disabled={action === 'EDIT'}
                     >
                         <MenuItem value="">Seleccione</MenuItem>
                         {participants.map((p: Participant) => (
@@ -47,7 +48,7 @@ export function AbmEventParticipants({
                     }
                 </FormControl>
                 {action === 'EDIT' &&
-                    <>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
                         <FormControl>
                             <TextField
                                 label="Nota Salto"
@@ -55,7 +56,7 @@ export function AbmEventParticipants({
                                 name='salto_note'
                                 value={formData.salto_note}
                                 onChange={handleChange}
-                                inputProps={{ step: 0.01, min: 0 }}
+                                inputProps={{ step: 0.001, min: 0 }}
                                 variant="outlined"
                             />
                         </FormControl>
@@ -66,7 +67,7 @@ export function AbmEventParticipants({
                                 name='paralelas_note'
                                 value={formData.paralelas_note}
                                 onChange={handleChange}
-                                inputProps={{ step: 0.01, min: 0 }}
+                                inputProps={{ step: 0.001, min: 0 }}
                                 variant="outlined"
                             />
                         </FormControl>
@@ -77,7 +78,7 @@ export function AbmEventParticipants({
                                 name='viga_note'
                                 value={formData.viga_note}
                                 onChange={handleChange}
-                                inputProps={{ step: 0.01, min: 0 }}
+                                inputProps={{ step: 0.001, min: 0 }}
                                 variant="outlined"
                             />
                         </FormControl>
@@ -88,11 +89,20 @@ export function AbmEventParticipants({
                                 name='suelo_note'
                                 value={formData.suelo_note}
                                 onChange={handleChange}
-                                inputProps={{ step: 0.01, min: 0 }}
+                                inputProps={{ step: 0.001, min: 0 }}
                                 variant="outlined"
                             />
                         </FormControl>
-                    </>
+                        <FormControl>
+                            <TextField
+                                label="Total"
+                                type="number"
+                                value={getTotal(formData)}
+                                variant="outlined"
+                                disabled
+                            />
+                        </FormControl>
+                    </Box>
                 }
                 <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>
                     <Button
@@ -102,7 +112,7 @@ export function AbmEventParticipants({
                         disabled={disabled}
                         onClick={handleClose}
                     >
-                        <HighlightOffIcon sx={{ transform: 'scale(1.3)' }} />
+                        Cancelar
                     </Button>
                     <Button
                         type="submit"
@@ -110,7 +120,7 @@ export function AbmEventParticipants({
                         sx={{ color: '#fff', px: 2 }}
                         disabled={disabled}
                     >
-                        <SaveIcon sx={{ transform: 'scale(1.3)' }} />
+                        Guardar
                     </Button>
                 </Box>
             </Box>
