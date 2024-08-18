@@ -7,7 +7,7 @@ import { EventParticipant } from '../server/db';
 import { getTotal } from '../helpers/utils';
 
 type Props = {
-    formData: EventParticipant,
+    formData: EventParticipant & { participant: { first_name: string, last_name: string } },
     onClose: any
 }
 
