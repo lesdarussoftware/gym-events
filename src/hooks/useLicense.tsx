@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { format } from "date-fns";
 
 import { ActivationService } from "../server/activation";
 import { License } from "../providers/LicenseProvider";
@@ -37,7 +38,7 @@ export function useLicense() {
         const expirationDate = new Date(createdAt);
         expirationDate.setDate(expirationDate.getDate() + expirationDays);
 
-        return expirationDate;
+        return format(expirationDate, 'dd/MM/yyyy');
     }
 
     return {
