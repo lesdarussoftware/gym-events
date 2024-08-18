@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 
 import { EnhancedTableHead } from './EnhancedTableHead';
 
@@ -28,6 +29,7 @@ type DataGridProps = {
     defaultOrderBy?: string,
     showEditAction?: boolean,
     showDeleteAction?: boolean
+    showPlayAction?: () => void
 }
 
 export function DataGrid({
@@ -40,6 +42,7 @@ export function DataGrid({
     defaultOrderBy = 'id',
     showEditAction = false,
     showDeleteAction = false,
+    showPlayAction = undefined,
     contentHeader = undefined
 }: DataGridProps) {
 
@@ -110,6 +113,23 @@ export function DataGrid({
                                                         gap: "1rem",
                                                         width: "auto",
                                                     }}>
+                                                        {typeof showPlayAction === 'function' &&
+                                                            <Tooltip
+                                                                title="Presentar"
+                                                                onClick={() => {
+                                                                    if (setData) setData(
+                                                                        rows.find(
+                                                                            (r: { id: any; }) => r.id === row.id
+                                                                        )
+                                                                    );
+                                                                    showPlayAction()
+                                                                }}
+                                                            >
+                                                                <IconButton>
+                                                                    <PlayCircleFilledIcon />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                        }
                                                         {showEditAction &&
                                                             <Tooltip
                                                                 title="Editar"

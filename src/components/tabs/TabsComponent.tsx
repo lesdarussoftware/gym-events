@@ -13,6 +13,7 @@ import { AbmEventParticipants } from '../AbmEventParticipants';
 
 import { CATEGORIES } from '../../helpers/constants';
 import { a11yProps } from '../../helpers/utils';
+import { ScorePresentation } from '../ScorePresentation';
 
 export function TabsComponent({ level, event_id }: { level: string; event_id: number }) {
 
@@ -39,6 +40,7 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
 
     const [value, setValue] = useState(0);
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [showScore, setShowScore] = useState(false);
 
     useEffect(() => {
         getParticipants();
@@ -73,10 +75,11 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                 <CustomTabPanel key={idx} value={value} index={idx}>
                     <DataGrid
                         headCells={headCells}
-                        rows={eventParticipants.filter(ev => ev.category === cat)}
+                        rows={eventParticipants.filter(ev => ev.category === cat && ev.level === level)}
                         setAction={setAction}
                         setData={setFormData}
                         defaultOrderBy='total'
+                        showPlayAction={() => setShowScore(true)}
                         showEditAction
                         showDeleteAction
                         contentHeader={
@@ -163,6 +166,12 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
                     </Button>
                 </Box>
             </ModalComponent>
+            {showScore &&
+                <ScorePresentation
+                    formData={formData}
+                    onClose={() => setShowScore(false)}
+                />
+            }
         </Box>
     );
 }
