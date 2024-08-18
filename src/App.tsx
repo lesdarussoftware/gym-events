@@ -4,6 +4,7 @@ import { createTheme } from "@mui/material"
 import { ThemeProvider } from "@emotion/react"
 
 import { MessageProvider } from "./providers/MessageProvider"
+import { LicenseProvider } from "./providers/LicenseProvider"
 
 import { Events } from "./pages/Events"
 import { Participants } from "./pages/Participants"
@@ -21,12 +22,14 @@ function App({ window }: { window: any }) {
   return (
     <ThemeProvider theme={theme}>
       <MessageProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Events window={window} />} />
-            <Route path="/participants" element={<Participants window={window} />} />
-          </Routes>
-        </BrowserRouter>
+        <LicenseProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Events window={window} />} />
+              <Route path="/participants" element={<Participants window={window} />} />
+            </Routes>
+          </BrowserRouter>
+        </LicenseProvider>
       </MessageProvider>
     </ThemeProvider>
   )

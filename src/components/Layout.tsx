@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -11,24 +11,28 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import { Avatar } from "@mui/material";
 import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 
-// import { AuthContext } from '../../providers/AuthProvider';
-
-import { UserDropdown } from './UserDropdown';
+import { LicenseContext } from '../providers/LicenseProvider';
+import { useLicense } from '../hooks/useLicense';
 
 const drawerWidth = 240;
 
 export function Layout({ window, children }) {
 
-    // const { auth } = useContext(AuthContext);
+    const { license } = useContext(LicenseContext)
 
     const navigate = useNavigate()
     const { pathname } = useLocation()
 
+    const { isActivated, getExpirationDate, isAppActivated } = useLicense();
+
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [showUserDropdown, setShowUserDropdown] = useState(false);
+
+    useEffect(() => {
+        isAppActivated()
+    }, [])
 
     const navItems = [
         { label: 'Eventos', pathname: '/', action: () => navigate('/') },
@@ -89,17 +93,20 @@ export function Layout({ window, children }) {
                             </Button>
                         ))}
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
-                        <Avatar
-                            sx={{ cursor: 'pointer', backgroundColor: '#FFF', color: '#F0B7FA' }}
-                            onMouseEnter={() => setShowUserDropdown(true)}
-                            onClick={() => setShowUserDropdown(!showUserDropdown)}
+                    {!isActivated &&
+                        <Typography
+                            variant="body1"
+                            align="center"
+                            sx={{
+                                backgroundColor: '#F0B7FA',
+                                color: '#FFF',
+                                p: 0.5,
+                                borderRadius: 1
+                            }}
                         >
-                            {/* {auth?.me.username.charAt(0).toUpperCase()} */}
-                            T
-                        </Avatar>
-                        {showUserDropdown && <UserDropdown setShowUserDropdown={setShowUserDropdown} />}
-                    </Box>
+                            Venc. licencia: {getExpirationDate(license)}
+                        </Typography>
+                    }
                 </Toolbar>
             </AppBar>
             <nav>

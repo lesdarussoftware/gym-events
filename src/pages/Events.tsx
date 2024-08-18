@@ -1,20 +1,26 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
+import { LicenseContext } from "../providers/LicenseProvider";
 import { useEvents } from "../hooks/useEvents";
 import { useForm } from "../hooks/useForm";
+import { useLicense } from "../hooks/useLicense";
 
 import { Layout } from "../components/Layout";
 import { AbmEvents } from "../components/events/AbmEvents";
 import { WorkOnEvent } from "../components/events/WorkOnEvent";
 import { ModalComponent } from "../components/ModalComponent";
+import { Login } from "./Login";
 
 export function Events({ window }) {
 
+    const { license } = useContext(LicenseContext)
+
+    const { isActivated, isAppActivated } = useLicense()
     const { events, getEvents, action, setAction, destroy } = useEvents();
     const eventFormData = useForm({
         defaultData: {
@@ -35,6 +41,10 @@ export function Events({ window }) {
     const [confirmDelete, setConfirmDelete] = useState(false);
 
     useEffect(() => {
+        isAppActivated()
+    }, [])
+
+    useEffect(() => {
         if (!action) getEvents();
     }, [action])
 
@@ -42,6 +52,8 @@ export function Events({ window }) {
         setAction(null);
         if (confirmDelete) setConfirmDelete(false);
     }
+
+    if (!license.hash && !isActivated) return <Login />
 
     return (
         <Layout window={window}>
