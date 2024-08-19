@@ -115,7 +115,7 @@ export function DataGrid({
                                                     }}>
                                                         {typeof showPlayAction === 'function' &&
                                                             <Tooltip
-                                                                title="Presentar"
+                                                                title="Presentar - Presione ESC para terminar"
                                                                 onClick={() => {
                                                                     if (setData) setData(
                                                                         rows.find(

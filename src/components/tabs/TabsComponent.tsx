@@ -169,7 +169,10 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
             {showScore &&
                 <ScorePresentation
                     formData={formData}
-                    onClose={() => setShowScore(false)}
+                    onClose={() => {
+                        setShowScore(false)
+                        reset()
+                    }}
                 />
             }
         </Box>
