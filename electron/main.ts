@@ -33,28 +33,9 @@ function createWindow() {
     minWidth: 700,
     autoHideMenuBar: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.mjs'),
-      nodeIntegration: true,
-      webSecurity: false
+      preload: path.join(__dirname, 'preload.mjs')
     },
   })
-
-  app.commandLine.appendSwitch('disable-site-isolation-trials')
-
-  win.webContents.session.webRequest.onBeforeSendHeaders(
-    (details, callback) => {
-      callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
-    },
-  );
-
-  win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        'Access-Control-Allow-Origin': ['*'],
-        ...details.responseHeaders,
-      },
-    });
-  });
 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {

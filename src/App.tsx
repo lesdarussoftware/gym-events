@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { HashRouter, Route, Routes } from "react-router-dom"
 import { createTheme } from "@mui/material"
 import { ThemeProvider } from "@emotion/react"
 
@@ -22,12 +22,12 @@ function App() {
     <ThemeProvider theme={theme}>
       <MessageProvider>
         <LicenseProvider>
-          <BrowserRouter>
+          <HashRouter>
             <Routes>
               <Route path="/" element={<Events />} />
               <Route path="/participants" element={<Participants />} />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </LicenseProvider>
       </MessageProvider>
     </ThemeProvider>
