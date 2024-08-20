@@ -11,7 +11,7 @@ import { Layout } from "../components/Layout";
 import { AbmParticipants } from "../components/AbmParticipants";
 import { ModalComponent } from "../components/ModalComponent";
 
-export function Participants({ window }) {
+export function Participants() {
 
     const { participants, getParticipants, action, setAction, destroy } = useParticipants();
     const participantFormData = useForm({
@@ -44,7 +44,7 @@ export function Participants({ window }) {
     }
 
     return (
-        <Layout window={window}>
+        <Layout>
             {(!action || action === 'DELETE') &&
                 <Button
                     variant="contained"

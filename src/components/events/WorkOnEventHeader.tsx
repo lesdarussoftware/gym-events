@@ -1,7 +1,9 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { format } from "date-fns";
 
-export function WorkOnEventHeader({ event }) {
+import { Event } from "../../server/db";
+
+export function WorkOnEventHeader({ event }: { event: Event }) {
     return (
         <TableContainer component={Paper} sx={{ mb: 3 }}>
             <Table>

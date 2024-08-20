@@ -1,9 +1,32 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Box, FormControl, InputLabel, Select, MenuItem, Typography, TextField } from '@mui/material';
-
-import { Participant } from '../server/db';
-
+import { Participant } from '../server/db'; // Asegúrate de que este tipo esté bien definido en tu proyecto
 import { getTotal } from '../helpers/utils';
 
+// Definimos los tipos de los props que recibe el componente
+interface AbmEventParticipantsProps {
+    handleChange: any;
+    handleSubmit: any;
+    formData: any;
+    validate: () => boolean;
+    reset: () => void;
+    setDisabled: (disabled: boolean) => void;
+    action: any;
+    setAction: any;
+    participants: Participant[];
+    errors: FormErrors;
+    disabled: boolean;
+    handleClose: () => void;
+}
+
+// Definimos el tipo de los errores
+interface FormErrors {
+    participant_id?: {
+        type: string;
+    };
+}
+
+// El componente con los tipos aplicados
 export function AbmEventParticipants({
     handleChange,
     handleSubmit,
@@ -17,7 +40,7 @@ export function AbmEventParticipants({
     errors,
     disabled,
     handleClose
-}) {
+}: AbmEventParticipantsProps) {
     return (
         <form
             onChange={handleChange}

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { createTheme } from "@mui/material"
 import { ThemeProvider } from "@emotion/react"
@@ -9,7 +8,7 @@ import { LicenseProvider } from "./providers/LicenseProvider"
 import { Events } from "./pages/Events"
 import { Participants } from "./pages/Participants"
 
-function App({ window }: { window: any }) {
+function App() {
 
   const theme = createTheme({
     palette: {
@@ -25,8 +24,8 @@ function App({ window }: { window: any }) {
         <LicenseProvider>
           <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Events window={window} />} />
-              <Route path="/participants" element={<Participants window={window} />} />
+              <Route path="/" element={<Events />} />
+              <Route path="/participants" element={<Participants />} />
             </Routes>
           </BrowserRouter>
         </LicenseProvider>

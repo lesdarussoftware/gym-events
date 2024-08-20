@@ -1,6 +1,14 @@
 import { Backdrop, Box, Modal, Fade } from '@mui/material';
+import { ReactNode } from 'react';
 
-export function ModalComponent({ children, open, onClose }) {
+type Props = {
+    children: ReactNode;
+    open: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onClose: any;
+}
+
+export function ModalComponent({ children, open, onClose }: Props) {
 
     const style = {
         position: 'absolute',

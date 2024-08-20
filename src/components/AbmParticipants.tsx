@@ -1,10 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, FormControl, Input, InputLabel, Typography } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import { useParticipants } from "../hooks/useParticipants";
 
-export function AbmParticipants({ participantFormData, action, setAction }) {
+type Props = {
+    participantFormData: any;
+    action: null | 'NEW' | 'EDIT' | 'DELETE';
+    setAction: any
+}
+
+export function AbmParticipants({ participantFormData, action, setAction }: Props) {
 
     const { handleSubmit } = useParticipants();
     const { handleChange, formData, errors, disabled, reset, validate, setDisabled } = participantFormData;

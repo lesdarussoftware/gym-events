@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,7 +19,7 @@ import { useLicense } from '../hooks/useLicense';
 
 const drawerWidth = 240;
 
-export function Layout({ window, children }) {
+export function Layout({ children }: { children: ReactNode }) {
 
     const { license } = useContext(LicenseContext)
 
@@ -56,8 +56,6 @@ export function Layout({ window, children }) {
             </List>
         </Box>
     );
-
-    const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
         <Box>
@@ -111,7 +109,6 @@ export function Layout({ window, children }) {
             </AppBar>
             <nav>
                 <Drawer
-                    container={container}
                     variant="temporary"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}

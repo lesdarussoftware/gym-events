@@ -1,15 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, TableCell, TableRow } from '@mui/material'
 import TableHead from '@mui/material/TableHead'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
 import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from 'react'
 
+type Props = {
+    headCells: any;
+    order: any;
+    orderBy: any;
+    onRequestSort: any;
+}
+
 export function EnhancedTableHead({
     headCells,
     order,
     orderBy,
     onRequestSort,
-}) {
+}: Props) {
 
     const createSortHandler = (property: any) => (event: any) => {
         onRequestSort(event, property)

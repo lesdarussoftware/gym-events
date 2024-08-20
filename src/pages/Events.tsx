@@ -16,7 +16,7 @@ import { WorkOnEvent } from "../components/events/WorkOnEvent";
 import { ModalComponent } from "../components/ModalComponent";
 import { Login } from "./Login";
 
-export function Events({ window }) {
+export function Events() {
 
     const { license } = useContext(LicenseContext)
 
@@ -56,7 +56,7 @@ export function Events({ window }) {
     if (!license.hash && !isActivated) return <Login />
 
     return (
-        <Layout window={window}>
+        <Layout>
             {(!action || action === 'DELETE') &&
                 <Button
                     variant="contained"

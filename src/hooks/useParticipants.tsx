@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useState } from "react";
 
 import { MessageContext } from "../providers/MessageProvider";
@@ -23,7 +24,7 @@ export function useParticipants() {
         validate: () => any,
         reset: () => void,
         setDisabled: (arg0: boolean) => void,
-        action: string,
+        action: null | 'NEW' | 'EDIT' | 'DELETE',
         setAction: (arg0: null) => void
     ) {
         e.preventDefault();

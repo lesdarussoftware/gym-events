@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -10,7 +11,12 @@ import { TabsComponent } from "../tabs/TabsComponent";
 
 import { LEVELS } from "../../helpers/constants";
 
-export function WorkOnEvent({ eventFormData, setAction }) {
+type Props = {
+    eventFormData: any;
+    setAction: any;
+}
+
+export function WorkOnEvent({ eventFormData, setAction }: Props) {
 
     const { formData: event } = eventFormData;
 

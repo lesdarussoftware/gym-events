@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, Button, Checkbox, FormControl, FormControlLabel, Input, InputLabel, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
@@ -7,7 +8,13 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import { useEvents } from "../../hooks/useEvents";
 
-export function AbmEvents({ eventFormData, action, setAction }) {
+type Props = {
+    eventFormData: any;
+    action: any;
+    setAction: any;
+}
+
+export function AbmEvents({ eventFormData, action, setAction }: Props) {
 
     const { handleSubmit } = useEvents();
     const { handleChange, formData, setFormData, errors, disabled, reset, validate, setDisabled } = eventFormData;
@@ -81,7 +88,7 @@ export function AbmEvents({ eventFormData, action, setAction }) {
                                 control={<Checkbox />}
                                 label="Activo"
                                 checked={formData.is_active}
-                                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                                onChange={(e: any) => setFormData({ ...formData, is_active: e.target.checked })}
                             />
                         }
                     </Box>
