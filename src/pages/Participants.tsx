@@ -22,10 +22,14 @@ export function Participants() {
             dni: '',
             phone: '',
             institution_name: '',
+            level: '',
+            birth: new Date(Date.now()),
+            gender: 'M'
         },
         rules: {
             first_name: { required: true, maxLength: 55 },
             last_name: { required: true, maxLength: 55 },
+            level: { required: true },
             dni: { required: true, minLength: 6, maxLength: 10 },
             phone: { maxLength: 25 },
             institution_name: { maxLength: 55 }

@@ -12,12 +12,23 @@ export const LEVELS = [
     'NIVEL 9'
 ];
 
-export const CATEGORIES = [
+export const CATEGORIES_GAF = [
     'PULGUITAS',
     'PREMINI',
     'MINI',
     'PRE INFANTIL',
     'INFANTIL',
     'JUVENIL',
-    'MAYORES'
+    'MAYOR'
+];
+
+export const CATEGORIES_GAM = [
+    'PULGUITAS',
+    'MINI',
+    'PRE INFANTIL',
+    'INFANTIL',
+    'CADETES',
+    'JUVENILES',
+    'JUNIOR',
+    'SENIOR'
 ];

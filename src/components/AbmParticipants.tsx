@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Button, FormControl, Input, InputLabel, Typography } from "@mui/material";
+import { Box, Button, Checkbox, FormControl, FormControlLabel, Input, InputLabel, MenuItem, Select, Typography } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
+import { es } from "date-fns/locale"
 
 import { useParticipants } from "../hooks/useParticipants";
+
+import { LEVELS } from "../helpers/constants";
 
 type Props = {
     participantFormData: any;
@@ -14,7 +19,7 @@ type Props = {
 export function AbmParticipants({ participantFormData, action, setAction }: Props) {
 
     const { handleSubmit } = useParticipants();
-    const { handleChange, formData, errors, disabled, reset, validate, setDisabled } = participantFormData;
+    const { handleChange, formData, setFormData, errors, disabled, reset, validate, setDisabled } = participantFormData;
 
     return (
         <Box sx={{ width: { xs: '100%', sm: '70%', maxWidth: '1000px' }, display: 'block', margin: 'auto', mt: 3 }}>
@@ -100,7 +105,59 @@ export function AbmParticipants({ participantFormData, action, setAction }: Prop
                             }
                         </FormControl>
                     </Box>
+                    <Box sx={{ display: 'flex', gap: 3, mt: 1, alignItems: 'center' }}>
+                        <FormControl sx={{ width: '50%' }}>
+                            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                                <DatePicker
+                                    label="Nacimiento"
+                                    value={new Date(formData.birth)}
+                                    onChange={value => handleChange({
+                                        target: {
+                                            name: 'birth',
+                                            value: new Date(value?.toISOString() ?? Date.now()),
+                                        }
+                                    })}
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+                        <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <FormControlLabel
+                                control={<Checkbox />}
+                                label="Masculino"
+                                checked={formData.gender === 'M'}
+                                onChange={() => setFormData({ ...formData, gender: 'M' })}
+                            />
+                            <FormControlLabel
+                                control={<Checkbox />}
+                                label="Femenino"
+                                checked={formData.gender === 'F'}
+                                onChange={() => setFormData({ ...formData, gender: 'F' })}
+                            />
+                        </Box>
+                    </Box>
                     <Box sx={{ display: 'flex', gap: 3, mt: 1 }}>
+                        <FormControl sx={{ width: '50%' }}>
+                            <InputLabel id="level-select">Nivel</InputLabel>
+                            <Select
+                                labelId="level-select"
+                                id="level"
+                                value={formData.level}
+                                label="Nivel"
+                                name="level"
+                                sx={{ width: '100%' }}
+                                onChange={handleChange}
+                            >
+                                <MenuItem value="">Seleccione</MenuItem>
+                                {LEVELS.map((lvl: string) => (
+                                    <MenuItem key={lvl} value={lvl}>{lvl}</MenuItem>
+                                ))}
+                            </Select>
+                            {errors.level?.type === 'required' &&
+                                <Typography variant="caption" color="red" marginTop={1}>
+                                    * El nivel es requerido.
+                                </Typography>
+                            }
+                        </FormControl>
                         <FormControl sx={{ width: '50%' }}>
                             <InputLabel htmlFor="institution_name">Institución</InputLabel>
                             <Input id="institution_name" type="text" name="institution_name" value={formData.institution_name} />
