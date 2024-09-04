@@ -4,11 +4,7 @@ export class EventParticipantService {
 
     static async exists(data: Omit<EventParticipant, 'id'>): Promise<boolean> {
         const event_participants = await EventParticipantService.findAll(data.event_id);
-        return event_participants.some(ev =>
-            ev.participant_id === data.participant_id &&
-            ev.category === data.category &&
-            ev.level === data.level
-        );
+        return event_participants.some(ev => ev.participant_id === data.participant_id);
     }
 
     static async findAll(event_id: number): Promise<EventParticipant[]> {
@@ -21,15 +17,6 @@ export class EventParticipantService {
         if (exists) throw new Error('Este registro ya existe.');
         const id = await db.events_participants.add(data);
         return id;
-    }
-
-    static async update(data: Partial<EventParticipant>): Promise<void> {
-        await db.events_participants.update(data.id!, {
-            salto_note: data.salto_note,
-            paralelas_note: data.paralelas_note,
-            viga_note: data.viga_note,
-            suelo_note: data.suelo_note
-        });
     }
 
     static async destroy(id: number): Promise<number> {
