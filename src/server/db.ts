@@ -14,9 +14,6 @@ interface Event {
     is_active: boolean;
 }
 
-type Gaf = 'PULGUITAS' | 'PREMINI' | 'MINI' | 'PRE INFANTIL' | 'INFANTIL' | 'JUVENIL' | 'MAYOR'
-type Gam = 'PULGUITAS' | 'MINI' | 'PRE INFANTIL' | 'INFANTIL' | 'CADETES' | 'JUVENILES' | 'JUNIOR' | 'SENIOR'
-
 interface Participant {
     id: number;
     first_name: string;
@@ -27,16 +24,18 @@ interface Participant {
     phone?: string;
     institution_name?: string;
     level: 'ESCUELA 1' | 'ESCUELA 2' | 'NIVEL 1' | 'NIVEL 2' | 'NIVEL 3' | 'NIVEL 4' | 'NIVEL 5' | 'NIVEL 6' | 'NIVEL 7' | 'NIVEL 8' | 'NIVEL 9';
-    category: Gaf | Gam;
 }
+
+type Gaf = 'PULGUITAS' | 'PREMINI' | 'MINI' | 'PRE INFANTIL' | 'INFANTIL' | 'JUVENIL' | 'MAYOR'
+type Gam = 'PULGUITAS' | 'MINI' | 'PRE INFANTIL' | 'INFANTIL' | 'CADETES' | 'JUVENILES' | 'JUNIOR' | 'SENIOR'
 
 interface EventParticipant {
     id: number;
     event_id: number;
     participant_id: number;
     participant_institution_name?: string;
-    participant_level?: string;
-    participant_category?: string;
+    participant_level: string;
+    category: Gaf | Gam;
 }
 
 interface NoteGaf {
@@ -71,8 +70,8 @@ const db = new Dexie('GymEventsDatabase') as Dexie & {
 db.version(1).stores({
     activation: 'id++, is_activated',
     events: 'id++, name, description, date, location, is_active',
-    participants: 'id++, first_name, last_name, dni, birth, gender, phone, institution_name, level, category',
-    events_participants: 'id++, event_id, participant_id, participant_institution_name, participant_level, participant_category',
+    participants: 'id++, first_name, last_name, dni, birth, gender, phone, institution_name, level',
+    events_participants: 'id++, event_id, participant_id, participant_institution_name, participant_level, category',
     notes_gaf: 'id++, event_participant_id, salto_note, paralelas_note, viga_note, suelo_note',
     notes_gam: 'id++, event_participant_id, salto_note, paralelas_note, barra_fija_note, suelo_note, razones_note, anillas_note'
 });

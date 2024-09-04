@@ -4,7 +4,10 @@ export class EventParticipantService {
 
     static async exists(data: Omit<EventParticipant, 'id'>): Promise<boolean> {
         const event_participants = await EventParticipantService.findAll(data.event_id);
-        return event_participants.some(ev => ev.participant_id === data.participant_id);
+        return event_participants.some(ev => {
+            return ev.participant_id === data.participant_id &&
+                ev.participant_level === data.participant_level
+        });
     }
 
     static async findAll(event_id: number): Promise<EventParticipant[]> {
