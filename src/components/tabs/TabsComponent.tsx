@@ -11,11 +11,18 @@ import { ModalComponent } from '../ModalComponent';
 import { CustomTabPanel } from './CustomTabPanel';
 import { AbmEventParticipants } from '../AbmEventParticipants';
 
-import { CATEGORIES } from '../../helpers/constants';
 import { a11yProps } from '../../helpers/utils';
 import { ScorePresentation } from '../ScorePresentation';
 
-export function TabsComponent({ level, event_id }: { level: string; event_id: number }) {
+export function TabsComponent({
+    level,
+    event_id,
+    categories
+}: {
+    level: string;
+    event_id: number;
+    categories: string[];
+}) {
 
     const { getParticipants, participants } = useParticipants();
     const { getAll, eventParticipants, action, setAction, headCells, handleSubmit, destroy } = useEventParticipants();
@@ -68,14 +75,14 @@ export function TabsComponent({ level, event_id }: { level: string; event_id: nu
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChangeTab} aria-label="basic tabs example">
-                    {CATEGORIES.map((cat, idx) => <Tab key={idx} label={cat} {...a11yProps(idx)} />)}
+                    {categories.map((cat, idx) => <Tab key={idx} label={cat} {...a11yProps(idx)} />)}
                 </Tabs>
             </Box>
-            {CATEGORIES.map((cat, idx) => (
+            {categories.map((cat, idx) => (
                 <CustomTabPanel key={idx} value={value} index={idx}>
                     <DataGrid
                         headCells={headCells}
-                        rows={eventParticipants.filter(ev => ev.category === cat && ev.level === level)}
+                        rows={eventParticipants.filter(ev => ev.category === cat && ev.participant_level === level)}
                         setAction={setAction}
                         setData={setFormData}
                         defaultOrderBy='total'
