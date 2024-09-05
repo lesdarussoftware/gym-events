@@ -8,6 +8,7 @@ import { EventParticipantService } from "../server/event-participants";
 import { ParticipantService } from "../server/participants";
 
 import { getTotal } from "../helpers/utils";
+import { NotesService } from "../server/notes";
 
 export function useEventParticipants() {
 
@@ -20,10 +21,19 @@ export function useEventParticipants() {
     async function getAll(event_id: number): Promise<void> {
         const dataParticipants = await ParticipantService.findAll();
         setParticipants(dataParticipants);
+        const notesGaf = await NotesService.findAllGaf();
+        const notesGam = await NotesService.findAllGam();
         const data = await EventParticipantService.findAll(event_id);
         setEventParticipants(data.map(ev => {
             const participant = dataParticipants.find(p => p.id === ev.participant_id)!;
-            return { ...ev, participant };
+            let notes;
+            if (participant.gender === 'F') {
+                notes = notesGaf.find(n => n.event_participant_id === ev.participant_id);
+            }
+            if (participant.gender === 'M') {
+                notes = notesGam.find(n => n.event_participant_id === ev.participant_id);
+            }
+            return { ...ev, participant, notes };
         }));
     }
 
@@ -50,11 +60,6 @@ export function useEventParticipants() {
                     participant: participants.find(p => p.id === formData.participant_id)!
                 }]);
                 setMessage('Participante registrado correctamente.');
-            }
-            if (action === 'EDIT') {
-                await EventParticipantService.update(formData);
-                setEventParticipants(prev => [...prev.filter(p => p.id !== formData.id), formData]);
-                setMessage('Notas editadas correctamente.');
             }
             reset();
             setSeverity('success');
@@ -90,7 +95,7 @@ export function useEventParticipants() {
         setOpenMessage(true);
     }
 
-    const headCells = useMemo(() => [
+    const headCells = [
         {
             id: 'id',
             numeric: false,
@@ -115,37 +120,41 @@ export function useEventParticipants() {
             sorter: (row: EventParticipant) => row.participant_institution_name,
             accessor: 'participant_institution_name'
         },
+    ]
+
+    const headCellsGaf = useMemo(() => [
+        ...headCells,
         {
             id: 'salto_note',
             numeric: false,
             disablePadding: true,
             label: 'Salto',
-            sorter: (row: EventParticipant) => row.salto_note,
-            accessor: 'salto_note'
+            sorter: (row: EventParticipant & { notes: { salto_note: string } }) => row.notes.salto_note,
+            accessor: (row: EventParticipant & { notes: { salto_note: string } }) => row.notes.salto_note
         },
         {
             id: 'paralelas_note',
             numeric: false,
             disablePadding: true,
             label: 'Paral.',
-            sorter: (row: EventParticipant) => row.paralelas_note,
-            accessor: 'paralelas_note'
+            sorter: (row: EventParticipant & { notes: { paralelas_note: string } }) => row.notes.paralelas_note,
+            accessor: (row: EventParticipant & { notes: { paralelas_note: string } }) => row.notes.paralelas_note
         },
         {
             id: 'viga_note',
             numeric: false,
             disablePadding: true,
             label: 'Viga',
-            sorter: (row: EventParticipant) => row.viga_note,
-            accessor: 'viga_note'
+            sorter: (row: EventParticipant & { notes: { viga_note: string } }) => row.notes.viga_note,
+            accessor: (row: EventParticipant & { notes: { viga_note: string } }) => row.notes.viga_note
         },
         {
             id: 'suelo_note',
             numeric: false,
             disablePadding: true,
             label: 'Suelo',
-            sorter: (row: EventParticipant) => row.suelo_note,
-            accessor: 'suelo_note'
+            sorter: (row: EventParticipant & { notes: { suelo_note: string } }) => row.notes.suelo_note,
+            accessor: (row: EventParticipant & { notes: { suelo_note: string } }) => row.notes.suelo_note
         },
         {
             id: 'total',
@@ -154,7 +163,67 @@ export function useEventParticipants() {
             label: 'Total',
             sorter: (row: EventParticipant) => row.id,
             accessor: (row: EventParticipant) => getTotal(row)
+        }
+    ], []);
+
+    const headCellsGam = useMemo(() => [
+        ...headCells,
+        {
+            id: 'salto_note',
+            numeric: false,
+            disablePadding: true,
+            label: 'Salto',
+            sorter: (row: EventParticipant & { notes: { salto_note: string } }) => row.notes.salto_note,
+            accessor: (row: EventParticipant & { notes: { salto_note: string } }) => row.notes.salto_note
         },
+        {
+            id: 'paralelas_note',
+            numeric: false,
+            disablePadding: true,
+            label: 'Paral.',
+            sorter: (row: EventParticipant & { notes: { paralelas_note: string } }) => row.notes.paralelas_note,
+            accessor: (row: EventParticipant & { notes: { paralelas_note: string } }) => row.notes.paralelas_note
+        },
+        {
+            id: 'barra_fija_note',
+            numeric: false,
+            disablePadding: true,
+            label: 'Barra fija',
+            sorter: (row: EventParticipant & { notes: { barra_fija_note: string } }) => row.notes.barra_fija_note,
+            accessor: (row: EventParticipant & { notes: { barra_fija_note: string } }) => row.notes.barra_fija_note
+        },
+        {
+            id: 'suelo_note',
+            numeric: false,
+            disablePadding: true,
+            label: 'Suelo',
+            sorter: (row: EventParticipant & { notes: { suelo_note: string } }) => row.notes.suelo_note,
+            accessor: (row: EventParticipant & { notes: { suelo_note: string } }) => row.notes.suelo_note
+        },
+        {
+            id: 'razones_note',
+            numeric: false,
+            disablePadding: true,
+            label: 'Razones',
+            sorter: (row: EventParticipant & { notes: { razones_note: string } }) => row.notes.razones_note,
+            accessor: (row: EventParticipant & { notes: { razones_note: string } }) => row.notes.razones_note
+        },
+        {
+            id: 'anillas_note',
+            numeric: false,
+            disablePadding: true,
+            label: 'Anillas',
+            sorter: (row: EventParticipant & { notes: { anillas_note: string } }) => row.notes.anillas_note,
+            accessor: (row: EventParticipant & { notes: { anillas_note: string } }) => row.notes.anillas_note
+        },
+        {
+            id: 'total',
+            numeric: false,
+            disablePadding: true,
+            label: 'Total',
+            sorter: (row: EventParticipant) => row.id,
+            accessor: (row: EventParticipant) => getTotal(row)
+        }
     ], []);
 
     return {
@@ -162,7 +231,8 @@ export function useEventParticipants() {
         getAll,
         action,
         setAction,
-        headCells,
+        headCellsGaf,
+        headCellsGam,
         handleSubmit,
         destroy
     };

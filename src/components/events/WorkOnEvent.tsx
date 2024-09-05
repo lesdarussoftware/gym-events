@@ -4,6 +4,7 @@ import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import { useParticipants } from "../../hooks/useParticipants";
+import { useEventParticipants } from "../../hooks/useEventParticipants";
 
 import { WorkOnEventHeader } from "./WorkOnEventHeader";
 import { Accordion, AccordionDetails, AccordionSummary } from "./AccordionComponents";
@@ -22,6 +23,7 @@ export function WorkOnEvent({ eventFormData, setAction }: Props) {
 
     const { formData: event } = eventFormData;
 
+    const { headCellsGaf, headCellsGam } = useEventParticipants()
     const { getParticipants } = useParticipants();
 
     const [value, setValue] = useState(0);
@@ -48,8 +50,8 @@ export function WorkOnEvent({ eventFormData, setAction }: Props) {
             <Typography variant="h6">Detalles</Typography>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChangeTab} aria-label="basic tabs example">
-                    <Tab label="Masculino" {...a11yProps(0)} />
-                    <Tab label="Femenino" {...a11yProps(1)} />
+                    <Tab label="GAF" {...a11yProps(0)} />
+                    <Tab label="GAM" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={0} index={value}>
@@ -66,7 +68,9 @@ export function WorkOnEvent({ eventFormData, setAction }: Props) {
                             <TabsComponent
                                 level={level}
                                 event_id={event.id}
-                                categories={CATEGORIES_GAM}
+                                categories={CATEGORIES_GAF}
+                                headCells={headCellsGaf}
+                                gender="F"
                             />
                         </AccordionDetails>
                     </Accordion>
@@ -86,7 +90,9 @@ export function WorkOnEvent({ eventFormData, setAction }: Props) {
                             <TabsComponent
                                 level={level}
                                 event_id={event.id}
-                                categories={CATEGORIES_GAF}
+                                categories={CATEGORIES_GAM}
+                                headCells={headCellsGam}
+                                gender="M"
                             />
                         </AccordionDetails>
                     </Accordion>

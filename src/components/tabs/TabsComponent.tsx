@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import { Button, Tabs, Tab, Box, Typography } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -17,15 +18,19 @@ import { ScorePresentation } from '../ScorePresentation';
 export function TabsComponent({
     level,
     event_id,
-    categories
+    categories,
+    headCells,
+    gender
 }: {
     level: string;
     event_id: number;
     categories: string[];
+    headCells: any[];
+    gender: 'F' | 'M'
 }) {
 
     const { getParticipants, participants } = useParticipants();
-    const { getAll, eventParticipants, action, setAction, headCells, handleSubmit, destroy } = useEventParticipants();
+    const { getAll, eventParticipants, action, setAction, handleSubmit, destroy } = useEventParticipants();
     const { formData, handleChange, setFormData, errors, disabled, validate, reset, setDisabled } = useForm({
         defaultData: {
             id: '',

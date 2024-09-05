@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Box, FormControl, InputLabel, Select, MenuItem, Typography, TextField } from '@mui/material';
-import { Participant } from '../server/db'; // Asegúrate de que este tipo esté bien definido en tu proyecto
+
+import { Participant } from '../server/db';
 import { getTotal } from '../helpers/utils';
 
-// Definimos los tipos de los props que recibe el componente
 interface AbmEventParticipantsProps {
     handleChange: any;
     handleSubmit: any;
@@ -19,14 +19,12 @@ interface AbmEventParticipantsProps {
     handleClose: () => void;
 }
 
-// Definimos el tipo de los errores
 interface FormErrors {
     participant_id?: {
         type: string;
     };
 }
 
-// El componente con los tipos aplicados
 export function AbmEventParticipants({
     handleChange,
     handleSubmit,

@@ -2,22 +2,36 @@ import { db, NoteGaf, NoteGam } from "./db";
 
 export class NotesService {
 
-    static async findAllGaf(event_participant_id: number): Promise<(NoteGaf)[]> {
-        const result = await db.notes_gaf.where({ event_participant_id }).toArray();
+    static async existsGaf(data: Omit<NoteGaf, 'id'>): Promise<boolean> {
+        const notes = await NotesService.findAllGaf();
+        return notes.some(n => n.event_participant_id === data.event_participant_id);
+    }
+
+    static async existsGam(data: Omit<NoteGam, 'id'>): Promise<boolean> {
+        const notes = await NotesService.findAllGam();
+        return notes.some(n => n.event_participant_id === data.event_participant_id);
+    }
+
+    static async findAllGaf(): Promise<(NoteGaf)[]> {
+        const result = await db.notes_gaf.toArray();
         return result;
     }
 
-    static async findAllGam(event_participant_id: number): Promise<(NoteGam)[]> {
-        const result = await db.notes_gam.where({ event_participant_id }).toArray();
+    static async findAllGam(): Promise<(NoteGam)[]> {
+        const result = await db.notes_gam.toArray();
         return result;
     }
 
     static async createNoteGaf(data: Omit<NoteGaf, 'id'>): Promise<number> {
+        const exists = await NotesService.existsGaf(data);
+        if (exists) throw new Error('Este registro ya existe.');
         const id = await db.notes_gaf.add(data);
         return id;
     }
 
     static async createNoteGam(data: Omit<NoteGam, 'id'>): Promise<number> {
+        const exists = await NotesService.existsGam(data);
+        if (exists) throw new Error('Este registro ya existe.');
         const id = await db.notes_gam.add(data);
         return id;
     }
