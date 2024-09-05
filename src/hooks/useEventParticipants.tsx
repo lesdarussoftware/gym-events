@@ -7,7 +7,7 @@ import { EventParticipant, Participant } from "../server/db";
 import { EventParticipantService } from "../server/event-participants";
 import { ParticipantService } from "../server/participants";
 
-import { getTotal } from "../helpers/utils";
+import { getTotalGaf, getTotalGam } from "../helpers/utils";
 import { NotesService } from "../server/notes";
 
 export function useEventParticipants() {
@@ -162,7 +162,14 @@ export function useEventParticipants() {
             disablePadding: true,
             label: 'Total',
             sorter: (row: EventParticipant) => row.id,
-            accessor: (row: EventParticipant) => getTotal(row)
+            accessor: (row: EventParticipant & {
+                notes: {
+                    suelo_note: string;
+                    salto_note: string;
+                    viga_note: string;
+                    paralelas_note: string;
+                }
+            }) => getTotalGaf(row.notes)
         }
     ], []);
 
@@ -222,7 +229,16 @@ export function useEventParticipants() {
             disablePadding: true,
             label: 'Total',
             sorter: (row: EventParticipant) => row.id,
-            accessor: (row: EventParticipant) => getTotal(row)
+            accessor: (row: EventParticipant & {
+                notes: {
+                    suelo_note: string;
+                    salto_note: string;
+                    barra_fija_note: string;
+                    paralelas_note: string;
+                    razones_note: string;
+                    anillas_note: string;
+                }
+            }) => getTotalGam(row.notes)
         }
     ], []);
 

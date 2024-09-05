@@ -2,7 +2,7 @@
 import { Button, Box, FormControl, InputLabel, Select, MenuItem, Typography, TextField } from '@mui/material';
 
 import { Participant } from '../server/db';
-import { getTotal } from '../helpers/utils';
+import { getAllowedParticipants, getTotalGaf, getTotalGam } from '../helpers/utils';
 
 interface AbmEventParticipantsProps {
     handleChange: any;
@@ -17,6 +17,7 @@ interface AbmEventParticipantsProps {
     errors: FormErrors;
     disabled: boolean;
     handleClose: () => void;
+    gender: 'F' | 'M';
 }
 
 interface FormErrors {
@@ -37,7 +38,8 @@ export function AbmEventParticipants({
     participants,
     errors,
     disabled,
-    handleClose
+    handleClose,
+    gender
 }: AbmEventParticipantsProps) {
     return (
         <form
@@ -58,7 +60,7 @@ export function AbmEventParticipants({
                         disabled={action === 'EDIT'}
                     >
                         <MenuItem value="">Seleccione</MenuItem>
-                        {participants.map((p: Participant) => (
+                        {getAllowedParticipants(participants, gender).map((p: Participant) => (
                             <MenuItem key={p.id} value={p.id}>{`${p.first_name} ${p.last_name}`}</MenuItem>
                         ))}
                     </Select>
@@ -118,7 +120,7 @@ export function AbmEventParticipants({
                             <TextField
                                 label="Total"
                                 type="number"
-                                value={getTotal(formData)}
+                                value={getTotalGaf(formData)}
                                 variant="outlined"
                                 disabled
                             />

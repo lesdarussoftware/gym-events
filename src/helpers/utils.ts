@@ -1,5 +1,6 @@
-import { EventParticipant } from "../server/db";
+import { Participant } from "../server/db";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 function descendingComparator(a: { [x: string]: any; }, b: { [x: string]: any; }, orderBy: string | number, sorter: (arg0: any) => any) {
     if ((b[orderBy] ? b[orderBy] : sorter(b)) < (a[orderBy] ? a[orderBy] : sorter(a))) {
         return -1;
@@ -35,8 +36,13 @@ export function a11yProps(index: number) {
     };
 }
 
-export function getTotal(eventParticipant: EventParticipant): number {
-    const { viga_note, salto_note, paralelas_note, suelo_note } = eventParticipant;
+export function getTotalGaf(notes: {
+    suelo_note: string;
+    salto_note: string;
+    viga_note: string;
+    paralelas_note: string;
+}): number {
+    const { viga_note, salto_note, paralelas_note, suelo_note } = notes;
 
     const viga = Number(viga_note) || 0;
     const salto = Number(salto_note) || 0;
@@ -46,4 +52,31 @@ export function getTotal(eventParticipant: EventParticipant): number {
     const total = viga + suelo + paralelas + salto;
 
     return parseFloat(total.toFixed(3));
+}
+
+export function getTotalGam(notes: {
+    suelo_note: string;
+    salto_note: string;
+    barra_fija_note: string;
+    paralelas_note: string;
+    razones_note: string;
+    anillas_note: string;
+}): number {
+    const { barra_fija_note, anillas_note, salto_note, paralelas_note, suelo_note, razones_note } = notes;
+
+    const barra = Number(barra_fija_note) || 0;
+    const anillas = Number(anillas_note) || 0;
+    const razones = Number(razones_note) || 0;
+    const salto = Number(salto_note) || 0;
+    const paralelas = Number(paralelas_note) || 0;
+    const suelo = Number(suelo_note) || 0;
+
+    const total = barra + anillas + razones + suelo + paralelas + salto;
+
+    return parseFloat(total.toFixed(3));
+}
+
+export function getAllowedParticipants(participants: Participant[], gender: 'M' | 'F'): Participant[] {
+
+    return participants;
 }
