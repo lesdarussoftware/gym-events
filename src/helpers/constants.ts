@@ -30,5 +30,6 @@ export const CATEGORIES_GAM = [
     'CADETES',
     'JUVENILES',
     'JUNIOR',
+    'MAYOR',
     'SENIOR'
 ];

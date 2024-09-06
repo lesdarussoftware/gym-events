@@ -1,4 +1,4 @@
-import { Participant } from "../server/db";
+import { Level, Participant } from "../server/db";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function descendingComparator(a: { [x: string]: any; }, b: { [x: string]: any; }, orderBy: string | number, sorter: (arg0: any) => any) {
@@ -76,7 +76,45 @@ export function getTotalGam(notes: {
     return parseFloat(total.toFixed(3));
 }
 
-export function getAllowedParticipants(participants: Participant[], gender: 'M' | 'F'): Participant[] {
+function getParticipantAge(birthDate: string): number {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const month = today.getMonth() - birth.getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+}
 
-    return participants;
+export function getAllowedParticipants(participants: Participant[], gender: 'M' | 'F', level: Level): Participant[] {
+    const categories = {
+        'F': {
+            'PULGUITAS': [3, 5],
+            'PREMINI': [6, 7],
+            'MINI': [8, 9],
+            'PRE INFANTIL': [10, 11],
+            'INFANTIL': [12, 13],
+            'JUVENIL': [14, 15],
+            'MAYOR': [16]
+        },
+        'M': {
+            'PULGUITAS': [3, 5],
+            'MINI': [6, 7],
+            'PRE INFANTIL': [8, 9],
+            'INFANTIL': [10, 11],
+            'CADETES': [12, 13],
+            'JUVENILES': [14, 15],
+            'JUNIOR': [16, 17],
+            'MAYOR': [18, 34],
+            'SENIOR': [35]
+        }
+    }
+    return participants.filter(p => {
+        const age = getParticipantAge(p.birth.toISOString().split('T')[0]);
+        const genderCategories = categories[p.gender];
+        const category = (Object.keys(genderCategories) as Array<keyof typeof genderCategories>).find(cat => {
+            return (genderCategories[cat].length === 0 && genderCategories[cat][0] <= age) ||
+                (age >= genderCategories[cat][0] && age <= genderCategories[cat][genderCategories[cat].length - 1])
+        });
+        return p.gender === gender && p.level === level && category !== undefined;
+    });
 }

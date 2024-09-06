@@ -14,6 +14,7 @@ import { AbmEventParticipants } from '../AbmEventParticipants';
 import { ScorePresentation } from '../ScorePresentation';
 
 import { a11yProps } from '../../helpers/utils';
+import { Level } from '../../server/db';
 
 export function TabsComponent({
     level,
@@ -22,7 +23,7 @@ export function TabsComponent({
     headCells,
     gender
 }: {
-    level: string;
+    level: Level;
     event_id: number;
     categories: string[];
     headCells: any[];
@@ -142,6 +143,7 @@ export function TabsComponent({
                     handleClose={handleClose}
                     gender={gender}
                     updateNotes={updateNotes}
+                    level={level}
                 />
             </ModalComponent>
             <ModalComponent open={action === 'DELETE'} onClose={handleClose}>

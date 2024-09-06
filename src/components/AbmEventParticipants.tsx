@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Box, FormControl, InputLabel, Select, MenuItem, Typography, TextField } from '@mui/material';
 
-import { NoteGaf, NoteGam, Participant } from '../server/db';
+import { Level, NoteGaf, NoteGam, Participant } from '../server/db';
 import { getAllowedParticipants, getTotalGaf, getTotalGam } from '../helpers/utils';
 
 interface AbmEventParticipantsProps {
@@ -19,6 +19,7 @@ interface AbmEventParticipantsProps {
     handleClose: () => void;
     gender: 'F' | 'M';
     updateNotes: (data: NoteGaf | NoteGam, gender: 'F' | 'M') => void;
+    level: Level;
 }
 
 interface FormErrors {
@@ -41,7 +42,8 @@ export function AbmEventParticipants({
     disabled,
     handleClose,
     gender,
-    updateNotes
+    updateNotes,
+    level
 }: AbmEventParticipantsProps) {
     return (
         <form
@@ -65,7 +67,7 @@ export function AbmEventParticipants({
                         disabled={action === 'EDIT'}
                     >
                         <MenuItem value="">Seleccione</MenuItem>
-                        {getAllowedParticipants(participants, gender).map((p: Participant) => (
+                        {getAllowedParticipants(participants, gender, level).map((p: Participant) => (
                             <MenuItem key={p.id} value={p.id}>{`${p.first_name} ${p.last_name}`}</MenuItem>
                         ))}
                     </Select>
