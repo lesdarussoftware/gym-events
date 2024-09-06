@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Box, FormControl, InputLabel, Select, MenuItem, Typography, TextField } from '@mui/material';
 
-import { Participant } from '../server/db';
+import { NoteGaf, NoteGam, Participant } from '../server/db';
 import { getAllowedParticipants, getTotalGaf, getTotalGam } from '../helpers/utils';
 
 interface AbmEventParticipantsProps {
@@ -18,6 +18,7 @@ interface AbmEventParticipantsProps {
     disabled: boolean;
     handleClose: () => void;
     gender: 'F' | 'M';
+    updateNotes: (data: NoteGaf | NoteGam, gender: 'F' | 'M') => void;
 }
 
 interface FormErrors {
@@ -39,12 +40,16 @@ export function AbmEventParticipants({
     errors,
     disabled,
     handleClose,
-    gender
+    gender,
+    updateNotes
 }: AbmEventParticipantsProps) {
     return (
         <form
             onChange={handleChange}
-            onSubmit={e => handleSubmit(e, formData, validate, reset, setDisabled, setAction, gender)}
+            onSubmit={e => {
+                if (action === 'NEW') handleSubmit(e, formData, validate, reset, setDisabled, setAction, gender)
+                if (action === 'EDIT') updateNotes(formData, gender);
+            }}
         >
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 3 }}>
                 <FormControl sx={{ width: '100%' }}>
@@ -96,17 +101,6 @@ export function AbmEventParticipants({
                         </FormControl>
                         <FormControl>
                             <TextField
-                                label="Nota Viga"
-                                type="number"
-                                name='viga_note'
-                                value={formData.viga_note}
-                                onChange={handleChange}
-                                inputProps={{ step: 0.001, min: 0 }}
-                                variant="outlined"
-                            />
-                        </FormControl>
-                        <FormControl>
-                            <TextField
                                 label="Nota Suelo"
                                 type="number"
                                 name='suelo_note'
@@ -116,15 +110,76 @@ export function AbmEventParticipants({
                                 variant="outlined"
                             />
                         </FormControl>
-                        <FormControl>
-                            <TextField
-                                label="Total"
-                                type="number"
-                                value={getTotalGaf(formData)}
-                                variant="outlined"
-                                disabled
-                            />
-                        </FormControl>
+                        {gender === 'F' &&
+                            <>
+                                <FormControl>
+                                    <TextField
+                                        label="Nota Viga"
+                                        type="number"
+                                        name='viga_note'
+                                        value={formData.viga_note}
+                                        onChange={handleChange}
+                                        inputProps={{ step: 0.001, min: 0 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="Total"
+                                        type="number"
+                                        value={getTotalGaf(formData)}
+                                        variant="outlined"
+                                        disabled
+                                    />
+                                </FormControl>
+                            </>
+                        }
+                        {gender === 'M' &&
+                            <>
+                                <FormControl>
+                                    <TextField
+                                        label="Nota Barra Fija"
+                                        type="number"
+                                        name='barra_fija_note'
+                                        value={formData.barra_fija_note}
+                                        onChange={handleChange}
+                                        inputProps={{ step: 0.001, min: 0 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="Nota Razones"
+                                        type="number"
+                                        name='razones_note'
+                                        value={formData.razones_note}
+                                        onChange={handleChange}
+                                        inputProps={{ step: 0.001, min: 0 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="Nota Anillas"
+                                        type="number"
+                                        name='anillas_note'
+                                        value={formData.anillas_note}
+                                        onChange={handleChange}
+                                        inputProps={{ step: 0.001, min: 0 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="Total"
+                                        type="number"
+                                        value={getTotalGam(formData)}
+                                        variant="outlined"
+                                        disabled
+                                    />
+                                </FormControl>
+                            </>
+                        }
                     </Box>
                 }
                 <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>

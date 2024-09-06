@@ -11,9 +11,9 @@ import { DataGrid } from '../datagrid/DataGrid';
 import { ModalComponent } from '../ModalComponent';
 import { CustomTabPanel } from './CustomTabPanel';
 import { AbmEventParticipants } from '../AbmEventParticipants';
+import { ScorePresentation } from '../ScorePresentation';
 
 import { a11yProps } from '../../helpers/utils';
-import { ScorePresentation } from '../ScorePresentation';
 
 export function TabsComponent({
     level,
@@ -30,7 +30,7 @@ export function TabsComponent({
 }) {
 
     const { getParticipants, participants } = useParticipants();
-    const { getAll, eventParticipants, action, setAction, handleSubmit, destroy } = useEventParticipants();
+    const { getAll, eventParticipants, action, setAction, handleSubmit, destroy, updateNotes } = useEventParticipants();
     const { formData, handleChange, setFormData, errors, disabled, validate, reset, setDisabled } = useForm({
         defaultData: {
             id: '',
@@ -141,6 +141,7 @@ export function TabsComponent({
                     disabled={disabled}
                     handleClose={handleClose}
                     gender={gender}
+                    updateNotes={updateNotes}
                 />
             </ModalComponent>
             <ModalComponent open={action === 'DELETE'} onClose={handleClose}>

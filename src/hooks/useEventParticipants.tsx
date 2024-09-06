@@ -3,7 +3,7 @@ import { useContext, useMemo, useState } from "react";
 
 import { MessageContext } from "../providers/MessageProvider";
 
-import { EventParticipant, Participant } from "../server/db";
+import { EventParticipant, NoteGaf, NoteGam, Participant } from "../server/db";
 import { EventParticipantService } from "../server/event-participants";
 import { ParticipantService } from "../server/participants";
 
@@ -87,6 +87,23 @@ export function useEventParticipants() {
             }
         }
         setDisabled(false);
+        setOpenMessage(true);
+    }
+
+    async function updateNotes(data: NoteGaf | NoteGam, gender: 'F' | 'M') {
+        try {
+            if (gender === 'F') await NotesService.updateNoteGaf(data);
+            if (gender === 'M') await NotesService.updateNoteGam(data);
+            setMessage('Notas actualizadas correctamente.');
+            setSeverity('success');
+        } catch (e) {
+            setSeverity('error');
+            if (e instanceof Error) {
+                setMessage(`Ocurrió un error: ${e.message}`);
+            } else {
+                setMessage('Ocurrió un error inesperado.');
+            }
+        }
         setOpenMessage(true);
     }
 
@@ -264,6 +281,7 @@ export function useEventParticipants() {
         headCellsGaf,
         headCellsGam,
         handleSubmit,
-        destroy
+        destroy,
+        updateNotes
     };
 }
