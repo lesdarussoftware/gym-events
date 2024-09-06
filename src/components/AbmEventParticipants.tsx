@@ -44,7 +44,7 @@ export function AbmEventParticipants({
     return (
         <form
             onChange={handleChange}
-            onSubmit={e => handleSubmit(e, formData, validate, reset, setDisabled, action, setAction)}
+            onSubmit={e => handleSubmit(e, formData, validate, reset, setDisabled, setAction, gender)}
         >
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 3 }}>
                 <FormControl sx={{ width: '100%' }}>

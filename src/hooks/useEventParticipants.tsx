@@ -43,24 +43,38 @@ export function useEventParticipants() {
         validate: () => any,
         reset: () => void,
         setDisabled: (arg0: boolean) => void,
-        action: null | 'NEW' | 'EDIT' | 'DELETE',
-        setAction: (arg0: null) => void
+        setAction: (arg0: null) => void,
+        gender: 'M' | 'F'
     ) {
         e.preventDefault();
         if (!validate()) return;
         try {
-            if (action === 'NEW') {
-                const id: number = await EventParticipantService.create({
-                    ...formData,
-                    id: undefined,
-                    participant: undefined
-                });
-                setEventParticipants(prev => [...prev, {
-                    ...formData, id,
-                    participant: participants.find(p => p.id === formData.participant_id)!
-                }]);
-                setMessage('Participante registrado correctamente.');
-            }
+            const id: number = await EventParticipantService.create({
+                ...formData,
+                id: undefined,
+                participant: undefined
+            });
+            setEventParticipants(prev => [...prev, {
+                ...formData, id,
+                participant: participants.find(p => p.id === formData.participant_id)!
+            }]);
+            if (gender === 'M') await NotesService.createNoteGaf({
+                event_participant_id: id,
+                salto_note: formData.salto_note,
+                paralelas_note: formData.paralelas_note,
+                suelo_note: formData.suelo_note,
+                viga_note: formData.viga_note
+            })
+            if (gender === 'F') await NotesService.createNoteGam({
+                event_participant_id: id,
+                salto_note: formData.salto_note,
+                paralelas_note: formData.paralelas_note,
+                suelo_note: formData.suelo_note,
+                barra_fija_note: formData.barra_fija_note,
+                razones_note: formData.razones_note,
+                anillas_note: formData.anillas_note
+            })
+            setMessage('Participante registrado correctamente.');
             reset();
             setSeverity('success');
             setAction(null);
