@@ -4,14 +4,30 @@ import { motion } from 'framer-motion';
 
 import { EventParticipant } from '../server/db';
 
-import { getTotal } from '../helpers/utils';
+import { getTotalGaf, getTotalGam } from '../helpers/utils';
 
 type Props = {
-    formData: EventParticipant & { participant: { first_name: string, last_name: string } },
+    formData: EventParticipant & {
+        participant: {
+            first_name: string,
+            last_name: string
+        },
+        notes: {
+            salto_note: string,
+            paralelas_note: string,
+            viga_note: string,
+            suelo_note: string,
+            penalization: string,
+            barra_fija_note: string,
+            arzones_note: string,
+            anillas_note: string
+        }
+    },
+    gender: 'M' | 'F';
     onClose: any
 }
 
-export function ScorePresentation({ formData, onClose }: Props) {
+export function ScorePresentation({ formData, gender, onClose }: Props) {
 
     useEffect(() => {
         const handleKeyPress = (event: { key: string; }) => {
@@ -37,7 +53,7 @@ export function ScorePresentation({ formData, onClose }: Props) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        Salto {formData.salto_note}
+                        Salto {formData.notes.salto_note}
                     </motion.div>
                     <motion.div
                         className="score-card"
@@ -45,15 +61,7 @@ export function ScorePresentation({ formData, onClose }: Props) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        Paralelas {formData.paralelas_note}
-                    </motion.div>
-                    <motion.div
-                        className="score-card"
-                        initial={{ opacity: 0, y: -50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                    >
-                        Viga {formData.viga_note}
+                        Paralelas {formData.notes.paralelas_note}
                     </motion.div>
                     <motion.div
                         className="score-card"
@@ -61,15 +69,54 @@ export function ScorePresentation({ formData, onClose }: Props) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.6 }}
                     >
-                        Suelo {formData.suelo_note}
+                        Suelo {formData.notes.suelo_note}
                     </motion.div>
+                    {gender === 'F' &&
+                        <motion.div
+                            className="score-card"
+                            initial={{ opacity: 0, y: -50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.4 }}
+                        >
+                            Viga {formData.notes.viga_note}
+                        </motion.div>
+                    }
+                    {gender === 'M' &&
+                        <>
+                            <motion.div
+                                className="score-card"
+                                initial={{ opacity: 0, y: -50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}
+                            >
+                                Barra fija {formData.notes.barra_fija_note}
+                            </motion.div>
+                            <motion.div
+                                className="score-card"
+                                initial={{ opacity: 0, y: -50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}
+                            >
+                                Arzones {formData.notes.arzones_note}
+                            </motion.div>
+                            <motion.div
+                                className="score-card"
+                                initial={{ opacity: 0, y: -50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}
+                            >
+                                Anillas {formData.notes.anillas_note}
+                            </motion.div>
+                        </>
+                    }
                     <motion.div
                         className="score-card"
                         initial={{ opacity: 0, y: -50 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.8 }}
                     >
-                        Total {getTotal(formData)}
+                        {gender === 'F' && `Total ${getTotalGaf(formData.notes)}`}
+                        {gender === 'M' && `Total ${getTotalGam(formData.notes)}`}
                     </motion.div>
                 </div>
             </div>

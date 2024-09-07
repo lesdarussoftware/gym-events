@@ -95,7 +95,7 @@ export function TabsComponent({
             {categories.map((cat, idx) => (
                 <CustomTabPanel key={idx} value={value} index={idx}>
                     <DataGrid
-                        headCells={gender === 'M' && NE_LEVELS.includes(level) ? headCells :
+                        headCells={gender === 'M' && NE_LEVELS.includes(level) ?
                             [
                                 ...headCells,
                                 {
@@ -118,7 +118,7 @@ export function TabsComponent({
                                     id: 'nf_note',
                                     numeric: false,
                                     disablePadding: true,
-                                    label: 'NE',
+                                    label: 'NF',
                                     sorter: (row: EventParticipant &
                                     {
                                         notes: {
@@ -134,7 +134,7 @@ export function TabsComponent({
                                         }
                                     }) => parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note)
                                 },
-                            ]
+                            ] : headCells
                         }
                         rows={eventParticipants.filter(ev => ev.category === cat && ev.participant_level === level)}
                         setAction={setAction}
@@ -233,6 +233,7 @@ export function TabsComponent({
             {showScore &&
                 <ScorePresentation
                     formData={formData}
+                    gender={gender}
                     onClose={() => {
                         setShowScore(false)
                         reset()

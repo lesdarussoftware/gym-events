@@ -193,7 +193,7 @@ export function useEventParticipants() {
             id: 'penalization',
             numeric: false,
             disablePadding: true,
-            label: 'Penalización',
+            label: 'Penal.',
             sorter: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization,
             accessor: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization
         },
@@ -269,7 +269,7 @@ export function useEventParticipants() {
             id: 'penalization',
             numeric: false,
             disablePadding: true,
-            label: 'Penalización',
+            label: 'Penal.',
             sorter: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization,
             accessor: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization
         },
