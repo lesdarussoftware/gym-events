@@ -46,7 +46,7 @@ export function TabsComponent({
             suelo_note: 0,
             viga_note: 0,
             barra_fija_note: 0,
-            razones_note: 0,
+            arzones_note: 0,
             anillas_note: 0
         },
         rules: {

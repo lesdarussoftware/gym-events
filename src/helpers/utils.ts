@@ -59,19 +59,19 @@ export function getTotalGam(notes: {
     salto_note: string;
     barra_fija_note: string;
     paralelas_note: string;
-    razones_note: string;
+    arzones_note: string;
     anillas_note: string;
 }): number {
-    const { barra_fija_note, anillas_note, salto_note, paralelas_note, suelo_note, razones_note } = notes;
+    const { barra_fija_note, anillas_note, salto_note, paralelas_note, suelo_note, arzones_note } = notes;
 
     const barra = Number(barra_fija_note) || 0;
     const anillas = Number(anillas_note) || 0;
-    const razones = Number(razones_note) || 0;
+    const arzones = Number(arzones_note) || 0;
     const salto = Number(salto_note) || 0;
     const paralelas = Number(paralelas_note) || 0;
     const suelo = Number(suelo_note) || 0;
 
-    const total = barra + anillas + razones + suelo + paralelas + salto;
+    const total = barra + anillas + arzones + suelo + paralelas + salto;
 
     return parseFloat(total.toFixed(3));
 }

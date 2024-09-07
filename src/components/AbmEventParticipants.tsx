@@ -151,10 +151,10 @@ export function AbmEventParticipants({
                                 </FormControl>
                                 <FormControl>
                                     <TextField
-                                        label="Nota Razones"
+                                        label="Nota Arzones"
                                         type="number"
-                                        name='razones_note'
-                                        value={formData.razones_note}
+                                        name='arzones_note'
+                                        value={formData.arzones_note}
                                         onChange={handleChange}
                                         inputProps={{ step: 0.001, min: 0 }}
                                         variant="outlined"

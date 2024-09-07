@@ -51,7 +51,7 @@ export class NotesService {
             paralelas_note: data.paralelas_note,
             barra_fija_note: data.barra_fija_note,
             suelo_note: data.suelo_note,
-            razones_note: data.razones_note,
+            arzones_note: data.arzones_note,
             anillas_note: data.anillas_note
         });
     }

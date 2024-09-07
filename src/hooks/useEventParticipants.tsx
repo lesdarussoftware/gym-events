@@ -71,7 +71,7 @@ export function useEventParticipants() {
                 paralelas_note: formData.paralelas_note,
                 suelo_note: formData.suelo_note,
                 barra_fija_note: formData.barra_fija_note,
-                razones_note: formData.razones_note,
+                arzones_note: formData.arzones_note,
                 anillas_note: formData.anillas_note
             })
             setMessage('Participante registrado correctamente.');
@@ -239,12 +239,12 @@ export function useEventParticipants() {
             accessor: (row: EventParticipant & { notes: { suelo_note: string } }) => row.notes.suelo_note
         },
         {
-            id: 'razones_note',
+            id: 'arzones_note',
             numeric: false,
             disablePadding: true,
-            label: 'Razones',
-            sorter: (row: EventParticipant & { notes: { razones_note: string } }) => row.notes.razones_note,
-            accessor: (row: EventParticipant & { notes: { razones_note: string } }) => row.notes.razones_note
+            label: 'Arzones',
+            sorter: (row: EventParticipant & { notes: { arzones_note: string } }) => row.notes.arzones_note,
+            accessor: (row: EventParticipant & { notes: { arzones_note: string } }) => row.notes.arzones_note
         },
         {
             id: 'anillas_note',
@@ -266,7 +266,7 @@ export function useEventParticipants() {
                     salto_note: string;
                     barra_fija_note: string;
                     paralelas_note: string;
-                    razones_note: string;
+                    arzones_note: string;
                     anillas_note: string;
                 }
             }) => getTotalGam(row.notes)

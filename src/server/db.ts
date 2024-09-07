@@ -56,7 +56,7 @@ interface NoteGam {
     paralelas_note: number;
     barra_fija_note: number;
     suelo_note: number;
-    razones_note: number;
+    arzones_note: number;
     anillas_note: number;
 }
 
@@ -75,7 +75,7 @@ db.version(1).stores({
     participants: 'id++, first_name, last_name, dni, birth, gender, phone, institution_name, level',
     events_participants: 'id++, event_id, participant_id, participant_institution_name, participant_level, category',
     notes_gaf: 'id++, event_participant_id, salto_note, paralelas_note, viga_note, suelo_note',
-    notes_gam: 'id++, event_participant_id, salto_note, paralelas_note, barra_fija_note, suelo_note, razones_note, anillas_note'
+    notes_gam: 'id++, event_participant_id, salto_note, paralelas_note, barra_fija_note, suelo_note, arzones_note, anillas_note'
 });
 
 export type { Activation, Event, Participant, EventParticipant, NoteGaf, NoteGam };
