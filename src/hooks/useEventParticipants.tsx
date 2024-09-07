@@ -190,6 +190,14 @@ export function useEventParticipants() {
             accessor: (row: EventParticipant & { notes: { suelo_note: string } }) => row.notes.suelo_note
         },
         {
+            id: 'penalization',
+            numeric: false,
+            disablePadding: true,
+            label: 'Penalización',
+            sorter: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization,
+            accessor: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization
+        },
+        {
             id: 'total',
             numeric: false,
             disablePadding: true,
@@ -256,6 +264,14 @@ export function useEventParticipants() {
             label: 'Anillas',
             sorter: (row: EventParticipant & { notes: { anillas_note: string } }) => row.notes.anillas_note,
             accessor: (row: EventParticipant & { notes: { anillas_note: string } }) => row.notes.anillas_note
+        },
+        {
+            id: 'penalization',
+            numeric: false,
+            disablePadding: true,
+            label: 'Penalización',
+            sorter: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization,
+            accessor: (row: EventParticipant & { notes: { penalization: string } }) => row.notes.penalization
         },
         {
             id: 'total',
