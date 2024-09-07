@@ -60,6 +60,8 @@ interface NoteGam {
     arzones_note: number;
     anillas_note: number;
     penalization: number;
+    nd_note?: number;
+    ne_note?: number;
 }
 
 const db = new Dexie('GymEventsDatabase') as Dexie & {
@@ -77,7 +79,7 @@ db.version(1).stores({
     participants: 'id++, first_name, last_name, dni, birth, gender, phone, institution_name, level',
     events_participants: 'id++, event_id, participant_id, participant_institution_name, participant_level, category',
     notes_gaf: 'id++, event_participant_id, salto_note, paralelas_note, viga_note, suelo_note, penalization',
-    notes_gam: 'id++, event_participant_id, salto_note, paralelas_note, barra_fija_note, suelo_note, arzones_note, anillas_note, penalization'
+    notes_gam: 'id++, event_participant_id, salto_note, paralelas_note, barra_fija_note, suelo_note, arzones_note, anillas_note, penalization, nd_note, ne_note'
 });
 
 export type { Activation, Event, Participant, EventParticipant, NoteGaf, NoteGam };

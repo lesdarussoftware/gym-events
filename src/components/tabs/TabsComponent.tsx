@@ -14,6 +14,7 @@ import { AbmEventParticipants } from '../AbmEventParticipants';
 import { ScorePresentation } from '../ScorePresentation';
 
 import { a11yProps } from '../../helpers/utils';
+import { EventParticipant } from '../../server/db';
 
 export function TabsComponent({
     level,
@@ -47,7 +48,9 @@ export function TabsComponent({
             barra_fija_note: 0,
             arzones_note: 0,
             anillas_note: 0,
-            penalization: 0
+            penalization: 0,
+            nd_note: 10,
+            ne_note: 0
         },
         rules: {
             participant_id: { required: true }
@@ -80,6 +83,8 @@ export function TabsComponent({
         if (confirmDelete) setConfirmDelete(false);
     }
 
+    const NE_LEVELS = ['NIVEL 6', 'NIVEL 7', 'NIVEL 8', 'NIVEL 9'];
+
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -90,7 +95,47 @@ export function TabsComponent({
             {categories.map((cat, idx) => (
                 <CustomTabPanel key={idx} value={value} index={idx}>
                     <DataGrid
-                        headCells={headCells}
+                        headCells={gender === 'M' && NE_LEVELS.includes(level) ? headCells :
+                            [
+                                ...headCells,
+                                {
+                                    id: 'nd_note',
+                                    numeric: false,
+                                    disablePadding: true,
+                                    label: 'ND',
+                                    sorter: (row: EventParticipant & { notes: { nd_note: string } }) => row.notes.nd_note,
+                                    accessor: (row: EventParticipant & { notes: { nd_note: string } }) => row.notes.nd_note
+                                },
+                                {
+                                    id: 'ne_note',
+                                    numeric: false,
+                                    disablePadding: true,
+                                    label: 'NE',
+                                    sorter: (row: EventParticipant & { notes: { ne_note: string } }) => row.notes.ne_note,
+                                    accessor: (row: EventParticipant & { notes: { ne_note: string } }) => row.notes.ne_note
+                                },
+                                {
+                                    id: 'nf_note',
+                                    numeric: false,
+                                    disablePadding: true,
+                                    label: 'NE',
+                                    sorter: (row: EventParticipant &
+                                    {
+                                        notes: {
+                                            nd_note: string;
+                                            ne_note: string;
+                                        }
+                                    }) => parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note),
+                                    accessor: (row: EventParticipant &
+                                    {
+                                        notes: {
+                                            nd_note: string;
+                                            ne_note: string;
+                                        }
+                                    }) => parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note)
+                                },
+                            ]
+                        }
                         rows={eventParticipants.filter(ev => ev.category === cat && ev.participant_level === level)}
                         setAction={setAction}
                         setData={setFormData}
