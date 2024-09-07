@@ -14,7 +14,6 @@ import { AbmEventParticipants } from '../AbmEventParticipants';
 import { ScorePresentation } from '../ScorePresentation';
 
 import { a11yProps } from '../../helpers/utils';
-import { Level } from '../../server/db';
 
 export function TabsComponent({
     level,
@@ -23,7 +22,7 @@ export function TabsComponent({
     headCells,
     gender
 }: {
-    level: Level;
+    level: string;
     event_id: number;
     categories: string[];
     headCells: any[];
@@ -47,7 +46,8 @@ export function TabsComponent({
             viga_note: 0,
             barra_fija_note: 0,
             arzones_note: 0,
-            anillas_note: 0
+            anillas_note: 0,
+            penalization: 0
         },
         rules: {
             participant_id: { required: true }

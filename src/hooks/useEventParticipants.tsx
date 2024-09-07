@@ -63,7 +63,8 @@ export function useEventParticipants() {
                 salto_note: formData.salto_note,
                 paralelas_note: formData.paralelas_note,
                 suelo_note: formData.suelo_note,
-                viga_note: formData.viga_note
+                viga_note: formData.viga_note,
+                penalization: formData.penalization
             })
             if (gender === 'F') await NotesService.createNoteGam({
                 event_participant_id: id,
@@ -72,7 +73,8 @@ export function useEventParticipants() {
                 suelo_note: formData.suelo_note,
                 barra_fija_note: formData.barra_fija_note,
                 arzones_note: formData.arzones_note,
-                anillas_note: formData.anillas_note
+                anillas_note: formData.anillas_note,
+                penalization: formData.penalization
             })
             setMessage('Participante registrado correctamente.');
             reset();
@@ -199,6 +201,7 @@ export function useEventParticipants() {
                     salto_note: string;
                     viga_note: string;
                     paralelas_note: string;
+                    penalization: string;
                 }
             }) => getTotalGaf(row.notes)
         }
@@ -268,6 +271,7 @@ export function useEventParticipants() {
                     paralelas_note: string;
                     arzones_note: string;
                     anillas_note: string;
+                    penalization: string;
                 }
             }) => getTotalGam(row.notes)
         }

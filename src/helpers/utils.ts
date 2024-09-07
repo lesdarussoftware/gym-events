@@ -1,6 +1,6 @@
-import { Level, Participant } from "../server/db";
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Participant } from "../server/db";
+
 function descendingComparator(a: { [x: string]: any; }, b: { [x: string]: any; }, orderBy: string | number, sorter: (arg0: any) => any) {
     if ((b[orderBy] ? b[orderBy] : sorter(b)) < (a[orderBy] ? a[orderBy] : sorter(a))) {
         return -1;
@@ -41,15 +41,17 @@ export function getTotalGaf(notes: {
     salto_note: string;
     viga_note: string;
     paralelas_note: string;
+    penalization: string;
 }): number {
-    const { viga_note, salto_note, paralelas_note, suelo_note } = notes;
+    const { viga_note, salto_note, paralelas_note, suelo_note, penalization } = notes;
 
     const viga = Number(viga_note) || 0;
     const salto = Number(salto_note) || 0;
     const paralelas = Number(paralelas_note) || 0;
     const suelo = Number(suelo_note) || 0;
+    const pen = Number(penalization) || 0;
 
-    const total = viga + suelo + paralelas + salto;
+    const total = (viga + suelo + paralelas + salto) - pen;
 
     return parseFloat(total.toFixed(3));
 }
@@ -61,8 +63,9 @@ export function getTotalGam(notes: {
     paralelas_note: string;
     arzones_note: string;
     anillas_note: string;
+    penalization: string;
 }): number {
-    const { barra_fija_note, anillas_note, salto_note, paralelas_note, suelo_note, arzones_note } = notes;
+    const { barra_fija_note, anillas_note, salto_note, paralelas_note, suelo_note, arzones_note, penalization } = notes;
 
     const barra = Number(barra_fija_note) || 0;
     const anillas = Number(anillas_note) || 0;
@@ -70,8 +73,9 @@ export function getTotalGam(notes: {
     const salto = Number(salto_note) || 0;
     const paralelas = Number(paralelas_note) || 0;
     const suelo = Number(suelo_note) || 0;
+    const pen = Number(penalization) || 0;
 
-    const total = barra + anillas + arzones + suelo + paralelas + salto;
+    const total = (barra + anillas + arzones + suelo + paralelas + salto) - pen;
 
     return parseFloat(total.toFixed(3));
 }
@@ -85,7 +89,7 @@ function getParticipantAge(birthDate: string): number {
     return age;
 }
 
-export function getAllowedParticipants(participants: Participant[], gender: 'M' | 'F', level: Level): Participant[] {
+export function getAllowedParticipants(participants: Participant[], gender: 'M' | 'F', level: string): Participant[] {
     const categories = {
         'F': {
             'PULGUITAS': [3, 5],

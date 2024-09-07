@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Box, FormControl, InputLabel, Select, MenuItem, Typography, TextField } from '@mui/material';
 
-import { Level, NoteGaf, NoteGam, Participant } from '../server/db';
+import { NoteGaf, NoteGam, Participant } from '../server/db';
 import { getAllowedParticipants, getTotalGaf, getTotalGam } from '../helpers/utils';
 
 interface AbmEventParticipantsProps {
@@ -19,7 +19,7 @@ interface AbmEventParticipantsProps {
     handleClose: () => void;
     gender: 'F' | 'M';
     updateNotes: (data: NoteGaf | NoteGam, gender: 'F' | 'M') => void;
-    level: Level;
+    level: string;
 }
 
 interface FormErrors {
@@ -182,6 +182,17 @@ export function AbmEventParticipants({
                                 </FormControl>
                             </>
                         }
+                         <FormControl>
+                            <TextField
+                                label="Penalización"
+                                type="number"
+                                name='penalization'
+                                value={formData.penalization}
+                                onChange={handleChange}
+                                inputProps={{ step: 0.001, min: 0 }}
+                                variant="outlined"
+                            />
+                        </FormControl>
                     </Box>
                 }
                 <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>

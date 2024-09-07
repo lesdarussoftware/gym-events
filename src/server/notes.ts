@@ -41,7 +41,8 @@ export class NotesService {
             salto_note: data.salto_note,
             paralelas_note: data.paralelas_note,
             viga_note: data.viga_note,
-            suelo_note: data.suelo_note
+            suelo_note: data.suelo_note,
+            penalization: data.penalization
         });
     }
 
@@ -52,7 +53,8 @@ export class NotesService {
             barra_fija_note: data.barra_fija_note,
             suelo_note: data.suelo_note,
             arzones_note: data.arzones_note,
-            anillas_note: data.anillas_note
+            anillas_note: data.anillas_note,
+            penalization: data.penalization
         });
     }
 
