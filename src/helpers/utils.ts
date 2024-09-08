@@ -80,7 +80,7 @@ export function getTotalGam(notes: {
     return parseFloat(total.toFixed(3));
 }
 
-function getParticipantAge(birthDate: string): number {
+export function getParticipantAge(birthDate: string): number {
     const today = new Date();
     const birth = new Date(birthDate);
     let age = today.getFullYear() - birth.getFullYear();
@@ -89,7 +89,12 @@ function getParticipantAge(birthDate: string): number {
     return age;
 }
 
-export function getAllowedParticipants(participants: Participant[], gender: 'M' | 'F', level: string): Participant[] {
+export function getAllowedParticipants(
+    participants: Participant[], 
+    gender: 'M' | 'F', 
+    level: string,
+    expectedCategory: string
+): Participant[] {
     const categories = {
         'F': {
             'PULGUITAS': [3, 5],
@@ -116,9 +121,9 @@ export function getAllowedParticipants(participants: Participant[], gender: 'M' 
         const age = getParticipantAge(p.birth.toISOString().split('T')[0]);
         const genderCategories = categories[p.gender];
         const category = (Object.keys(genderCategories) as Array<keyof typeof genderCategories>).find(cat => {
-            return (genderCategories[cat].length === 0 && genderCategories[cat][0] <= age) ||
+            return (genderCategories[cat].length === 1 && genderCategories[cat][0] <= age) ||
                 (age >= genderCategories[cat][0] && age <= genderCategories[cat][genderCategories[cat].length - 1])
         });
-        return p.gender === gender && p.level === level && category !== undefined;
+        return p.gender === gender && p.level === level && category === expectedCategory && category !== undefined;
     });
 }

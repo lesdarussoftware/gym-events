@@ -24,16 +24,16 @@ export function useEventParticipants() {
         const notesGaf = await NotesService.findAllGaf();
         const notesGam = await NotesService.findAllGam();
         const data = await EventParticipantService.findAll(event_id);
-        setEventParticipants(data.map(ev => {
-            const participant = dataParticipants.find(p => p.id === ev.participant_id)!;
+        setEventParticipants(data.map(ep => {
+            const participant = dataParticipants.find(p => p.id === ep.participant_id)!;
             let notes;
             if (participant.gender === 'F') {
-                notes = notesGaf.find(n => n.event_participant_id === ev.participant_id);
+                notes = notesGaf.find(n => n.event_participant_id === ep.id);
             }
             if (participant.gender === 'M') {
-                notes = notesGam.find(n => n.event_participant_id === ev.participant_id);
+                notes = notesGam.find(n => n.event_participant_id === ep.id);
             }
-            return { ...ev, participant, notes };
+            return { ...ep, participant, notes };
         }));
     }
 
@@ -50,32 +50,33 @@ export function useEventParticipants() {
         if (!validate()) return;
         try {
             const id: number = await EventParticipantService.create({
-                ...formData,
-                id: undefined,
-                participant: undefined
+                event_id: formData.event_id,
+                participant_id: formData.participant_id,
+                participant_institution_name: formData.participant_institution_name,
+                participant_level: formData.participant_level,
+                category: formData.category
             });
-            setEventParticipants(prev => [...prev, {
-                ...formData, id,
-                participant: participants.find(p => p.id === formData.participant_id)!
-            }]);
-            if (gender === 'M') await NotesService.createNoteGaf({
+            const newNotes = {
                 event_participant_id: id,
                 salto_note: formData.salto_note,
                 paralelas_note: formData.paralelas_note,
                 suelo_note: formData.suelo_note,
-                viga_note: formData.viga_note,
                 penalization: formData.penalization
-            })
-            if (gender === 'F') await NotesService.createNoteGam({
-                event_participant_id: id,
-                salto_note: formData.salto_note,
-                paralelas_note: formData.paralelas_note,
-                suelo_note: formData.suelo_note,
+            }
+            const newNotesGaf = { ...newNotes, viga_note: formData.viga_note }
+            const newNotesGam = {
+                ...newNotes,
                 barra_fija_note: formData.barra_fija_note,
                 arzones_note: formData.arzones_note,
                 anillas_note: formData.anillas_note,
-                penalization: formData.penalization
-            })
+            }
+            if (gender === 'F') await NotesService.createNoteGaf(newNotesGaf)
+            if (gender === 'M') await NotesService.createNoteGam(newNotesGam)
+            setEventParticipants(prev => [...prev, {
+                ...formData, id,
+                participant: participants.find(p => p.id === formData.participant_id)!,
+                notes: gender === 'M' ? newNotesGam : newNotesGaf
+            }]);
             setMessage('Participante registrado correctamente.');
             reset();
             setSeverity('success');
@@ -92,12 +93,23 @@ export function useEventParticipants() {
         setOpenMessage(true);
     }
 
-    async function updateNotes(data: NoteGaf | NoteGam, gender: 'F' | 'M') {
+    async function updateNotes(
+        e: { preventDefault: () => void; },
+        data: NoteGaf | NoteGam,
+        gender: 'F' | 'M',
+        setAction: (arg0: null) => void
+    ) {
+        e.preventDefault();
         try {
             if (gender === 'F') await NotesService.updateNoteGaf(data);
             if (gender === 'M') await NotesService.updateNoteGam(data);
             setMessage('Notas actualizadas correctamente.');
+            setEventParticipants(prev => [...prev.filter(ep => ep.id !== data.event_participant_id), {
+                ...prev.find(ep => ep.id === data.event_participant_id)!,
+                notes: data
+            }]);
             setSeverity('success');
+            setAction(null);
         } catch (e) {
             setSeverity('error');
             if (e instanceof Error) {

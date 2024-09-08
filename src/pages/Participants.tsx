@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { useParticipants } from "../hooks/useParticipants";
 import { useForm } from "../hooks/useForm";
@@ -10,10 +8,11 @@ import { useForm } from "../hooks/useForm";
 import { Layout } from "../components/Layout";
 import { AbmParticipants } from "../components/AbmParticipants";
 import { ModalComponent } from "../components/ModalComponent";
+import { DataGrid } from "../components/datagrid/DataGrid";
 
 export function Participants() {
 
-    const { participants, getParticipants, action, setAction, destroy } = useParticipants();
+    const { participants, getParticipants, action, setAction, destroy, headCells } = useParticipants();
     const participantFormData = useForm({
         defaultData: {
             id: '',
@@ -49,15 +48,6 @@ export function Participants() {
 
     return (
         <Layout>
-            {(!action || action === 'DELETE') &&
-                <Button
-                    variant="contained"
-                    sx={{ color: '#FFF', mt: 1, mb: 3 }}
-                    onClick={() => setAction('NEW')}
-                >
-                    <AddCircleIcon />
-                </Button>
-            }
             {!action && participants.length === 0 &&
                 <Typography variant="h5" align="center" pt={3}>
                     No hay participantes registrados.
@@ -65,45 +55,25 @@ export function Participants() {
             }
             {(!action || action === 'DELETE') && participants.length > 0 &&
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'space-between' }}>
-                    {participants.map((participant) => (
-                        <Box
-                            key={participant.id}
-                            sx={{
-                                p: 1,
-                                mb: 1,
-                                borderRadius: 1,
-                                boxShadow: '1px 1px 3px #B6B6B6',
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'space-between',
-                                width: { xs: '100%', md: '49%' }
-                            }}
-                        >
-                            <Typography variant="h6">
-                                {`#${participant.id} ${participant.first_name} ${participant.last_name}`}
-                            </Typography>
-                            <Box sx={{ display: 'flex', gap: 1 }}>
-                                <Button size="small" variant="contained"
-                                    sx={{ color: '#FFF' }}
-                                    onClick={() => {
-                                        participantFormData.setFormData(participant);
-                                        setAction('DELETE');
-                                    }}
+                    <DataGrid
+                        headCells={headCells}
+                        rows={participants}
+                        showEditAction
+                        showDeleteAction
+                        setData={participantFormData.setFormData}
+                        setAction={setAction}
+                        contentHeader={
+                            <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                                <Button
+                                    variant="contained"
+                                    sx={{ color: '#FFF', mt: 1, mb: 3 }}
+                                    onClick={() => setAction('NEW')}
                                 >
-                                    <DeleteForeverIcon />
-                                </Button>
-                                <Button size="small" variant="contained"
-                                    sx={{ color: '#FFF' }}
-                                    onClick={() => {
-                                        participantFormData.setFormData(participant);
-                                        setAction('EDIT');
-                                    }}
-                                >
-                                    <EditIcon />
+                                    <AddCircleIcon />
                                 </Button>
                             </Box>
-                        </Box>
-                    ))}
+                        }
+                    />
                 </Box>
             }
             {(action === 'NEW' || action === 'EDIT') &&

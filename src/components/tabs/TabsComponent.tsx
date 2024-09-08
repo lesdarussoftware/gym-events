@@ -39,18 +39,9 @@ export function TabsComponent({
             event_id,
             participant_id: '',
             participant_institution_name: '',
-            level,
+            participant_level: level,
             category: '',
-            salto_note: 0,
-            paralelas_note: 0,
-            suelo_note: 0,
-            viga_note: 0,
-            barra_fija_note: 0,
-            arzones_note: 0,
-            anillas_note: 0,
-            penalization: 0,
-            nd_note: 10,
-            ne_note: 0
+            notes: []
         },
         rules: {
             participant_id: { required: true }
@@ -60,6 +51,18 @@ export function TabsComponent({
     const [value, setValue] = useState(0);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [showScore, setShowScore] = useState(false);
+    const [notes, setNotes] = useState({
+        salto_note: 0,
+        paralelas_note: 0,
+        suelo_note: 0,
+        viga_note: 0,
+        barra_fija_note: 0,
+        arzones_note: 0,
+        anillas_note: 0,
+        penalization: 0,
+        nd_note: 10,
+        ne_note: 0,
+    });
 
     useEffect(() => {
         getParticipants();
@@ -74,6 +77,10 @@ export function TabsComponent({
             })
         }
     }, [formData.participant_id])
+
+    useEffect(() => {
+        if (action === 'EDIT') setNotes(formData.notes);
+    }, [action])
 
     const handleChangeTab = (_event: React.SyntheticEvent, newValue: number) => setValue(newValue);
 
@@ -189,6 +196,9 @@ export function TabsComponent({
                     gender={gender}
                     updateNotes={updateNotes}
                     level={level}
+                    category={formData.category}
+                    notes={notes}
+                    setNotes={setNotes}
                 />
             </ModalComponent>
             <ModalComponent open={action === 'DELETE'} onClose={handleClose}>

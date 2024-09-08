@@ -29,7 +29,14 @@ export class ParticipantService {
 
     static async destroy(id: number): Promise<number> {
         const eventParticipants = await db.events_participants.where({ participant_id: id }).toArray();
-        await db.events_participants.bulkDelete(eventParticipants.map(ep => ep.id));
+        const epIds = eventParticipants.map(ep => ep.id)
+        await db.events_participants.bulkDelete(epIds);
+        const notesGaf = await db.notes_gaf.where({ event_participant_id: epIds }).toArray();
+        const gafIds = notesGaf.map(n => n.id);
+        await db.notes_gaf.bulkDelete(gafIds);
+        const notesGam = await db.notes_gam.where({ event_participant_id: epIds }).toArray();
+        const gamIds = notesGam.map(n => n.id);
+        await db.notes_gam.bulkDelete(gamIds);
         await db.participants.delete(id);
         return id;
     }

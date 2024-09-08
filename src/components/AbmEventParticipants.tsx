@@ -18,8 +18,11 @@ interface AbmEventParticipantsProps {
     disabled: boolean;
     handleClose: () => void;
     gender: 'F' | 'M';
-    updateNotes: (data: NoteGaf | NoteGam, gender: 'F' | 'M') => void;
+    updateNotes: (e: any, data: NoteGaf | NoteGam, gender: 'F' | 'M', setAction: any) => void;
     level: string;
+    category: string;
+    notes: any;
+    setNotes: (notes: any) => void;
 }
 
 interface FormErrors {
@@ -43,14 +46,43 @@ export function AbmEventParticipants({
     handleClose,
     gender,
     updateNotes,
-    level
+    level,
+    category,
+    notes,
+    setNotes
 }: AbmEventParticipantsProps) {
+
+    const handleChangeNote = (e: any) => {
+        setNotes({
+            ...notes,
+            [e.target.name]: e.target.value
+        })
+    }
+
     return (
         <form
             onChange={handleChange}
             onSubmit={e => {
-                if (action === 'NEW') handleSubmit(e, formData, validate, reset, setDisabled, setAction, gender)
-                if (action === 'EDIT') updateNotes(formData, gender);
+                if (action === 'NEW') handleSubmit(e, { ...formData, ...notes }, validate, reset, setDisabled, setAction, gender)
+                if (action === 'EDIT') {
+                    const newNotes = {
+                        id: notes.id,
+                        event_participant_id: notes.event_participant_id,
+                        salto_note: notes.salto_note,
+                        paralelas_note: notes.paralelas_note,
+                        suelo_note: notes.suelo_note,
+                        penalization: notes.penalization
+                    }
+                    const newNotesGaf = { ...newNotes, viga_note: notes.viga_note }
+                    const newNotesGam = {
+                        ...newNotes,
+                        barra_fija_note: notes.barra_fija_note,
+                        arzones_note: notes.arzones_note,
+                        anillas_note: notes.anillas_note
+                    }
+                    const data = gender === 'F' ? newNotesGaf : newNotesGam;
+                    updateNotes(e, data, gender, setAction)
+                }
             }}
         >
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 3 }}>
@@ -67,7 +99,7 @@ export function AbmEventParticipants({
                         disabled={action === 'EDIT'}
                     >
                         <MenuItem value="">Seleccione</MenuItem>
-                        {getAllowedParticipants(participants, gender, level).map((p: Participant) => (
+                        {getAllowedParticipants(participants, gender, level, category).map((p: Participant) => (
                             <MenuItem key={p.id} value={p.id}>{`${p.first_name} ${p.last_name}`}</MenuItem>
                         ))}
                     </Select>
@@ -84,8 +116,8 @@ export function AbmEventParticipants({
                                 label="Nota Salto"
                                 type="number"
                                 name='salto_note'
-                                value={formData.salto_note}
-                                onChange={handleChange}
+                                value={notes.salto_note}
+                                onChange={handleChangeNote}
                                 inputProps={{ step: 0.001, min: 0 }}
                                 variant="outlined"
                             />
@@ -95,8 +127,8 @@ export function AbmEventParticipants({
                                 label="Nota Paralelas"
                                 type="number"
                                 name='paralelas_note'
-                                value={formData.paralelas_note}
-                                onChange={handleChange}
+                                value={notes.paralelas_note}
+                                onChange={handleChangeNote}
                                 inputProps={{ step: 0.001, min: 0 }}
                                 variant="outlined"
                             />
@@ -106,8 +138,8 @@ export function AbmEventParticipants({
                                 label="Nota Suelo"
                                 type="number"
                                 name='suelo_note'
-                                value={formData.suelo_note}
-                                onChange={handleChange}
+                                value={notes.suelo_note}
+                                onChange={handleChangeNote}
                                 inputProps={{ step: 0.001, min: 0 }}
                                 variant="outlined"
                             />
@@ -119,8 +151,19 @@ export function AbmEventParticipants({
                                         label="Nota Viga"
                                         type="number"
                                         name='viga_note'
-                                        value={formData.viga_note}
-                                        onChange={handleChange}
+                                        value={notes.viga_note}
+                                        onChange={handleChangeNote}
+                                        inputProps={{ step: 0.001, min: 0 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="Penalización"
+                                        type="number"
+                                        name='penalization'
+                                        value={notes.penalization}
+                                        onChange={handleChangeNote}
                                         inputProps={{ step: 0.001, min: 0 }}
                                         variant="outlined"
                                     />
@@ -129,7 +172,7 @@ export function AbmEventParticipants({
                                     <TextField
                                         label="Total"
                                         type="number"
-                                        value={getTotalGaf(formData)}
+                                        value={getTotalGaf(notes)}
                                         variant="outlined"
                                         disabled
                                     />
@@ -143,8 +186,8 @@ export function AbmEventParticipants({
                                         label="Nota Barra Fija"
                                         type="number"
                                         name='barra_fija_note'
-                                        value={formData.barra_fija_note}
-                                        onChange={handleChange}
+                                        value={notes.barra_fija_note}
+                                        onChange={handleChangeNote}
                                         inputProps={{ step: 0.001, min: 0 }}
                                         variant="outlined"
                                     />
@@ -154,8 +197,8 @@ export function AbmEventParticipants({
                                         label="Nota Arzones"
                                         type="number"
                                         name='arzones_note'
-                                        value={formData.arzones_note}
-                                        onChange={handleChange}
+                                        value={notes.arzones_note}
+                                        onChange={handleChangeNote}
                                         inputProps={{ step: 0.001, min: 0 }}
                                         variant="outlined"
                                     />
@@ -165,8 +208,19 @@ export function AbmEventParticipants({
                                         label="Nota Anillas"
                                         type="number"
                                         name='anillas_note'
-                                        value={formData.anillas_note}
-                                        onChange={handleChange}
+                                        value={notes.anillas_note}
+                                        onChange={handleChangeNote}
+                                        inputProps={{ step: 0.001, min: 0 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="Penalización"
+                                        type="number"
+                                        name='penalization'
+                                        value={notes.penalization}
+                                        onChange={handleChangeNote}
                                         inputProps={{ step: 0.001, min: 0 }}
                                         variant="outlined"
                                     />
@@ -175,24 +229,13 @@ export function AbmEventParticipants({
                                     <TextField
                                         label="Total"
                                         type="number"
-                                        value={getTotalGam(formData)}
+                                        value={getTotalGam(notes)}
                                         variant="outlined"
                                         disabled
                                     />
                                 </FormControl>
                             </>
                         }
-                         <FormControl>
-                            <TextField
-                                label="Penalización"
-                                type="number"
-                                name='penalization'
-                                value={formData.penalization}
-                                onChange={handleChange}
-                                inputProps={{ step: 0.001, min: 0 }}
-                                variant="outlined"
-                            />
-                        </FormControl>
                     </Box>
                 }
                 <Box sx={{ display: 'flex', justifyContent: 'end', gap: 1 }}>
