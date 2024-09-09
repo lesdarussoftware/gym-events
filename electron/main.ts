@@ -30,7 +30,7 @@ function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'icon.ico'),
     title: 'JM Gym',
-    minWidth: 700,
+    minWidth: 1000,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs')

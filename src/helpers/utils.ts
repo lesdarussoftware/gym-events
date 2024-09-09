@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Participant } from "../server/db";
+import { CATEGORIES_BY_AGE } from "./constants";
 
 function descendingComparator(a: { [x: string]: any; }, b: { [x: string]: any; }, orderBy: string | number, sorter: (arg0: any) => any) {
     if ((b[orderBy] ? b[orderBy] : sorter(b)) < (a[orderBy] ? a[orderBy] : sorter(a))) {
@@ -89,41 +90,24 @@ export function getParticipantAge(birthDate: string): number {
     return age;
 }
 
+export function getParticipantCategory(birth: Date, gender: 'M' | 'F') {
+    const age = getParticipantAge(birth.toISOString().split('T')[0]);
+    const genderCategories = CATEGORIES_BY_AGE[gender];
+    const category = (Object.keys(genderCategories) as Array<keyof typeof genderCategories>).find(cat => {
+        return (genderCategories[cat].length === 1 && genderCategories[cat][0] <= age) ||
+            (age >= genderCategories[cat][0] && age <= genderCategories[cat][genderCategories[cat].length - 1])
+    });
+    return category;
+}
+
 export function getAllowedParticipants(
-    participants: Participant[], 
-    gender: 'M' | 'F', 
+    participants: Participant[],
+    gender: 'M' | 'F',
     level: string,
     expectedCategory: string
 ): Participant[] {
-    const categories = {
-        'F': {
-            'PULGUITAS': [3, 5],
-            'PREMINI': [6, 7],
-            'MINI': [8, 9],
-            'PRE INFANTIL': [10, 11],
-            'INFANTIL': [12, 13],
-            'JUVENIL': [14, 15],
-            'MAYOR': [16]
-        },
-        'M': {
-            'PULGUITAS': [3, 5],
-            'MINI': [6, 7],
-            'PRE INFANTIL': [8, 9],
-            'INFANTIL': [10, 11],
-            'CADETES': [12, 13],
-            'JUVENILES': [14, 15],
-            'JUNIOR': [16, 17],
-            'MAYOR': [18, 34],
-            'SENIOR': [35]
-        }
-    }
     return participants.filter(p => {
-        const age = getParticipantAge(p.birth.toISOString().split('T')[0]);
-        const genderCategories = categories[p.gender];
-        const category = (Object.keys(genderCategories) as Array<keyof typeof genderCategories>).find(cat => {
-            return (genderCategories[cat].length === 1 && genderCategories[cat][0] <= age) ||
-                (age >= genderCategories[cat][0] && age <= genderCategories[cat][genderCategories[cat].length - 1])
-        });
+        const category = getParticipantCategory(p.birth, gender);
         return p.gender === gender && p.level === level && category === expectedCategory && category !== undefined;
     });
 }

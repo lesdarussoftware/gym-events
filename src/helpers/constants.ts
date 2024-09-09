@@ -33,3 +33,26 @@ export const CATEGORIES_GAM = [
     'MAYOR',
     'SENIOR'
 ];
+
+export const CATEGORIES_BY_AGE = {
+    'F': {
+        'PULGUITAS': [3, 5],
+        'PREMINI': [6, 7],
+        'MINI': [8, 9],
+        'PRE INFANTIL': [10, 11],
+        'INFANTIL': [12, 13],
+        'JUVENIL': [14, 15],
+        'MAYOR': [16]
+    },
+    'M': {
+        'PULGUITAS': [3, 5],
+        'MINI': [6, 7],
+        'PRE INFANTIL': [8, 9],
+        'INFANTIL': [10, 11],
+        'CADETES': [12, 13],
+        'JUVENILES': [14, 15],
+        'JUNIOR': [16, 17],
+        'MAYOR': [18, 34],
+        'SENIOR': [35]
+    }
+}

@@ -39,7 +39,7 @@ export function WorkOnEvent({ eventFormData, setAction }: Props) {
     }, []);
 
     return (
-        <Box sx={{ width: { xs: '100%', md: '70%', maxWidth: '1500px' }, display: 'block', margin: 'auto', mt: 3 }}>
+        <Box sx={{ width: '100%', maxWidth: '1500px', display: 'block', margin: 'auto', mt: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                 <Typography variant="h6">{`Evento #${event.id} ${event.name}`}</Typography>
                 <Button variant="outlined" onClick={() => setAction(null)}>

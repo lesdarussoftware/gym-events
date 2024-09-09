@@ -132,14 +132,20 @@ export function TabsComponent({
                                             nd_note: string;
                                             ne_note: string;
                                         }
-                                    }) => parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note),
+                                    }) => {
+                                        const result = parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note);
+                                        return isNaN(result) ? 0 : result;
+                                    },
                                     accessor: (row: EventParticipant &
                                     {
                                         notes: {
                                             nd_note: string;
                                             ne_note: string;
                                         }
-                                    }) => parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note)
+                                    }) => {
+                                        const result = parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note);
+                                        return isNaN(result) ? 0 : result;
+                                    }
                                 },
                             ] : headCells
                         }

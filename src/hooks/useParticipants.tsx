@@ -6,7 +6,7 @@ import { MessageContext } from "../providers/MessageProvider";
 
 import { Participant } from "../server/db";
 import { ParticipantService } from "../server/participants";
-import { getParticipantAge } from "../helpers/utils";
+import { getParticipantAge, getParticipantCategory } from "../helpers/utils";
 
 export function useParticipants() {
 
@@ -154,9 +154,17 @@ export function useParticipants() {
             id: 'institution_name',
             numeric: false,
             disablePadding: true,
-            label: 'Institución',
+            label: 'Gym / Esc.',
             sorter: (row: Participant) => row.institution_name,
             accessor: 'institution_name'
+        },
+        {
+            id: 'category',
+            numeric: false,
+            disablePadding: true,
+            label: 'Categoría actual',
+            sorter: (row: Participant) => getParticipantCategory(row.birth, row.gender),
+            accessor: (row: Participant) => getParticipantCategory(row.birth, row.gender)
         }
     ]
 

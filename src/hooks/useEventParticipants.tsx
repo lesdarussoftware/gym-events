@@ -69,6 +69,8 @@ export function useEventParticipants() {
                 barra_fija_note: formData.barra_fija_note,
                 arzones_note: formData.arzones_note,
                 anillas_note: formData.anillas_note,
+                nd_note: formData.nd_note,
+                ne_note: formData.ne_note
             }
             if (gender === 'F') await NotesService.createNoteGaf(newNotesGaf)
             if (gender === 'M') await NotesService.createNoteGam(newNotesGam)
@@ -249,7 +251,7 @@ export function useEventParticipants() {
             id: 'barra_fija_note',
             numeric: false,
             disablePadding: true,
-            label: 'Barra fija',
+            label: 'B. fija',
             sorter: (row: EventParticipant & { notes: { barra_fija_note: string } }) => row.notes.barra_fija_note,
             accessor: (row: EventParticipant & { notes: { barra_fija_note: string } }) => row.notes.barra_fija_note
         },

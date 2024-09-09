@@ -12,6 +12,11 @@ export class ParticipantService {
         return result;
     }
 
+    static async findById(id: number): Promise<Participant | undefined> {
+        const participant = await db.participants.get(id);
+        return participant;
+    }
+
     static async create(participant: Omit<Participant, 'id'>): Promise<number> {
         const dniAlreadyExists = await ParticipantService.dniExists(participant.dni);
         if (dniAlreadyExists) throw new Error('El participante ya existe.');
@@ -21,8 +26,11 @@ export class ParticipantService {
 
     static async update(updatedParticipant: Partial<Participant>): Promise<void> {
         if (updatedParticipant.dni) {
+            const participant = await ParticipantService.findById(updatedParticipant.id!);
             const dniAlreadyExists = await ParticipantService.dniExists(updatedParticipant.dni);
-            if (dniAlreadyExists) throw new Error('El participante ya existe.');
+            if (dniAlreadyExists && updatedParticipant.dni !== participant?.dni) {
+                throw new Error('El participante ya existe.');
+            }
         }
         await db.participants.update(updatedParticipant.id!, updatedParticipant);
     }
