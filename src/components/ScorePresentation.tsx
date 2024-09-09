@@ -87,7 +87,7 @@ export function ScorePresentation({ formData, gender, onClose }: Props) {
                                 className="score-card"
                                 initial={{ opacity: 0, y: -50 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 0.8 }}
+                                transition={{ duration: 0.5, delay: 0.6 }}
                             >
                                 Barra fija {formData.notes.barra_fija_note}
                             </motion.div>
@@ -95,7 +95,7 @@ export function ScorePresentation({ formData, gender, onClose }: Props) {
                                 className="score-card"
                                 initial={{ opacity: 0, y: -50 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 1 }}
+                                transition={{ duration: 0.5, delay: 0.8 }}
                             >
                                 Arzones {formData.notes.arzones_note}
                             </motion.div>
@@ -103,7 +103,7 @@ export function ScorePresentation({ formData, gender, onClose }: Props) {
                                 className="score-card"
                                 initial={{ opacity: 0, y: -50 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 1.2 }}
+                                transition={{ duration: 0.5, delay: 1 }}
                             >
                                 Anillas {formData.notes.anillas_note}
                             </motion.div>
@@ -114,7 +114,7 @@ export function ScorePresentation({ formData, gender, onClose }: Props) {
                     className="score-card total-card"
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 1.4 }}
+                    transition={{ duration: 0.5, delay: gender === 'M' ? 1.2 : 0.8 }}
                 >
                     {gender === 'F' && `Total ${getTotalGaf(formData.notes)}`}
                     {gender === 'M' && `Total ${getTotalGam(formData.notes)}`}
