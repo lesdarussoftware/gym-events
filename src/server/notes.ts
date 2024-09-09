@@ -54,7 +54,9 @@ export class NotesService {
             suelo_note: data.suelo_note,
             arzones_note: data.arzones_note,
             anillas_note: data.anillas_note,
-            penalization: data.penalization
+            penalization: data.penalization,
+            nd_note: data.nd_note,
+            ne_note: data.ne_note
         });
     }
 

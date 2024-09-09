@@ -13,7 +13,7 @@ import { CustomTabPanel } from './CustomTabPanel';
 import { AbmEventParticipants } from '../AbmEventParticipants';
 import { ScorePresentation } from '../ScorePresentation';
 
-import { a11yProps } from '../../helpers/utils';
+import { a11yProps, getAllowedParticipants } from '../../helpers/utils';
 import { EventParticipant } from '../../server/db';
 
 export function TabsComponent({
@@ -99,82 +99,91 @@ export function TabsComponent({
                     {categories.map((cat, idx) => <Tab key={idx} label={cat} {...a11yProps(idx)} />)}
                 </Tabs>
             </Box>
-            {categories.map((cat, idx) => (
-                <CustomTabPanel key={idx} value={value} index={idx}>
-                    <DataGrid
-                        headCells={gender === 'M' && NE_LEVELS.includes(level) ?
-                            [
-                                ...headCells,
-                                {
-                                    id: 'nd_note',
-                                    numeric: false,
-                                    disablePadding: true,
-                                    label: 'ND',
-                                    sorter: (row: EventParticipant & { notes: { nd_note: string } }) => row.notes.nd_note,
-                                    accessor: (row: EventParticipant & { notes: { nd_note: string } }) => row.notes.nd_note
-                                },
-                                {
-                                    id: 'ne_note',
-                                    numeric: false,
-                                    disablePadding: true,
-                                    label: 'NE',
-                                    sorter: (row: EventParticipant & { notes: { ne_note: string } }) => row.notes.ne_note,
-                                    accessor: (row: EventParticipant & { notes: { ne_note: string } }) => row.notes.ne_note
-                                },
-                                {
-                                    id: 'nf_note',
-                                    numeric: false,
-                                    disablePadding: true,
-                                    label: 'NF',
-                                    sorter: (row: EventParticipant &
+            {categories.map((cat, idx) => {
+                const allowed = getAllowedParticipants(participants, gender, level, cat);
+                const allowedIds = allowed.map(a => a.id)
+                return (
+                    <CustomTabPanel key={idx} value={value} index={idx}>
+                        <DataGrid
+                            headCells={gender === 'M' && NE_LEVELS.includes(level) ?
+                                [
+                                    ...headCells,
                                     {
-                                        notes: {
-                                            nd_note: string;
-                                            ne_note: string;
-                                        }
-                                    }) => {
-                                        const result = parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note);
-                                        return isNaN(result) ? 0 : result;
+                                        id: 'nd_note',
+                                        numeric: false,
+                                        disablePadding: true,
+                                        label: 'ND',
+                                        sorter: (row: EventParticipant & { notes: { nd_note: string } }) => parseInt(row.notes.nd_note),
+                                        accessor: (row: EventParticipant & { notes: { nd_note: string } }) => parseInt(row.notes.nd_note)
                                     },
-                                    accessor: (row: EventParticipant &
                                     {
-                                        notes: {
-                                            nd_note: string;
-                                            ne_note: string;
+                                        id: 'ne_note',
+                                        numeric: false,
+                                        disablePadding: true,
+                                        label: 'NE',
+                                        sorter: (row: EventParticipant & { notes: { ne_note: string } }) => parseInt(row.notes.ne_note),
+                                        accessor: (row: EventParticipant & { notes: { ne_note: string } }) => parseInt(row.notes.ne_note)
+                                    },
+                                    {
+                                        id: 'nf_note',
+                                        numeric: false,
+                                        disablePadding: true,
+                                        label: 'NF',
+                                        sorter: (row: EventParticipant &
+                                        {
+                                            notes: {
+                                                nd_note: string;
+                                                ne_note: string;
+                                            }
+                                        }) => {
+                                            const result = parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note);
+                                            return isNaN(result) ? 0 : result;
+                                        },
+                                        accessor: (row: EventParticipant &
+                                        {
+                                            notes: {
+                                                nd_note: string;
+                                                ne_note: string;
+                                            }
+                                        }) => {
+                                            const result = parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note);
+                                            return isNaN(result) ? 0 : result;
                                         }
-                                    }) => {
-                                        const result = parseInt(row.notes.nd_note) - parseInt(row.notes.ne_note);
-                                        return isNaN(result) ? 0 : result;
-                                    }
-                                },
-                            ] : headCells
-                        }
-                        rows={eventParticipants.filter(ev => ev.category === cat && ev.participant_level === level)}
-                        setAction={setAction}
-                        setData={setFormData}
-                        defaultOrderBy='total'
-                        showPlayAction={() => setShowScore(true)}
-                        showEditAction
-                        showDeleteAction
-                        contentHeader={
-                            <Box sx={{ display: 'flex', justifyContent: 'end', p: 1, pb: 0 }}>
-                                <Button
-                                    variant='contained'
-                                    size="small"
-                                    sx={{ color: '#FFF' }}
-                                    disabled={participants.length === 0}
-                                    onClick={() => {
-                                        setFormData({ ...formData, category: cat })
-                                        setAction('NEW')
-                                    }}
-                                >
-                                    <AddCircleIcon />
-                                </Button>
-                            </Box>
-                        }
-                    />
-                </CustomTabPanel>
-            ))}
+                                    },
+                                ] : headCells
+                            }
+                            rows={eventParticipants.filter(ep => {
+                                return ep.category === cat &&
+                                    ep.participant_level === level &&
+                                    ep.participant_id &&
+                                    allowedIds.includes(ep.participant_id)
+                            })}
+                            setAction={setAction}
+                            setData={setFormData}
+                            defaultOrderBy='total'
+                            showPlayAction={() => setShowScore(true)}
+                            showEditAction
+                            showDeleteAction
+                            contentHeader={
+                                <Box sx={{ display: 'flex', justifyContent: 'end', p: 1, pb: 0 }}>
+                                    <Button
+                                        variant='contained'
+                                        size="small"
+                                        sx={{ color: '#FFF' }}
+                                        disabled={participants.length === 0}
+                                        onClick={() => {
+                                            setFormData({ ...formData, category: cat })
+                                            setAction('NEW')
+                                        }}
+                                    >
+                                        <AddCircleIcon />
+                                    </Button>
+                                </Box>
+                            }
+                        />
+                    </CustomTabPanel>
+                )
+            })}
             <ModalComponent open={action === 'NEW' || action === 'EDIT'} onClose={handleClose}>
                 <Typography variant='h6' mb={1}>
                     {action === 'NEW' && 'Nuevo registro'}

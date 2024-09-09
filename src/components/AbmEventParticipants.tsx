@@ -78,7 +78,9 @@ export function AbmEventParticipants({
                         ...newNotes,
                         barra_fija_note: notes.barra_fija_note,
                         arzones_note: notes.arzones_note,
-                        anillas_note: notes.anillas_note
+                        anillas_note: notes.anillas_note,
+                        nd_note: notes.nd_note,
+                        ne_note: notes.ne_note
                     }
                     const data = gender === 'F' ? newNotesGaf : newNotesGam;
                     updateNotes(e, data, gender, setAction)
@@ -220,6 +222,28 @@ export function AbmEventParticipants({
                                         type="number"
                                         name='penalization'
                                         value={notes.penalization}
+                                        onChange={handleChangeNote}
+                                        inputProps={{ step: 0.001, min: 0 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="ND"
+                                        type="number"
+                                        name='nd_note'
+                                        value={notes.nd_note}
+                                        onChange={handleChangeNote}
+                                        inputProps={{ step: 0.001, min: 10 }}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl>
+                                    <TextField
+                                        label="NE"
+                                        type="number"
+                                        name='ne_note'
+                                        value={notes.ne_note}
                                         onChange={handleChangeNote}
                                         inputProps={{ step: 0.001, min: 0 }}
                                         variant="outlined"
